@@ -8,10 +8,10 @@ const announcementModel = new mongoose.Schema({
     description:{
         type: String
     },
-    image:{
-        type: String,
-        allowNull: false
-    },
+    // image:{
+    //     type: String,
+    //     allowNull: false
+    // },
     property_id:{
         type: String
     },

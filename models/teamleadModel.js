@@ -8,7 +8,7 @@ const teamleadModel = new mongoose.Schema({
     designation:{
         type: String
     },
-    team_lead_img:{
+    image:{
         type: String,
         allowNull: false
     },

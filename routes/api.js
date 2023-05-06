@@ -2,12 +2,13 @@ import express from "express";
 import UserController from "../controllers/userController.js";
 import Authentication from "../middleware/auth.js";
 import roleAuth from "../middleware/roleAuth.js";
-import clgController from "../controllers/collegeController.js"
-import categoryController from "../controllers/categoryController.js"
+import clgController from "../controllers/collegeController.js";
+import categoryController from "../controllers/categoryController.js";
 import statusController from "../controllers/statusController.js";
 import multer from 'multer';
 import bodyParser from 'body-parser';
-import propertyController from "../controllers/propertyController.js";
+import PropertyTypeController from "../controllers/propertyTypeController.js";
+import fs from "fs";
 
 
 const Router = express.Router();
@@ -16,7 +17,7 @@ Router.use(bodyParser.json());
 
 var storage = multer.diskStorage({
    destination: function (req, file, cb) {
-      cb(null, 'public/uploads');
+      cb(null, 'images');
    },
    filename: function (req, file, cb) {
       cb(null, Date.now() + '-' + file.originalname);
@@ -35,9 +36,9 @@ var upload = multer({
       //console.log("req.files",req.files);
       //console.log("logo",req.files.logo);
 
-         if (!file) cb("Image is Required", false);
+         if (!file) cb("Image is Required", false);  
 
-         if (file?.fieldname == "image" || req.files.logo.fieldname == "logo" || req.files.gallery_img || req.files.featured_img) {
+         if (file?.fieldname == "image" || req.files.gallery_img || req.files.featured_img) {
 
             if (!(file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg")) {
 
@@ -60,54 +61,53 @@ var upload = multer({
 
 
 
-
 // ##### User-Router #####
 
 //USER CREATE
-Router.post("/userCreate", UserController.userRegister);
+Router.post("/userCreate",upload.single('image'), UserController.userRegister);
 
 //USER LOGIN
-Router.post("/userLogin", UserController.userLogin); 
+Router.post("/userLogin", UserController.userLogin);
 
 //LOGOUT
 Router.delete('/logout', Authentication, UserController.logout);
 
 //SEND MAIL
-Router.post('/sendMail', UserController.sendMail); 
+Router.post('/sendMail', UserController.sendMail);
 
 //CHANGE PASSWORD
-Router.put('/change-password', UserController.changePassword); 
+Router.put('/change-password', UserController.changePassword);
 
 //FORGET PASSWORD
-Router.put('/forget-password', UserController.forgetPassword); 
+Router.put('/forget-password', UserController.forgetPassword);
 
 //RESEND OTP
-Router.post('/resend-otp', UserController.resendOtp); 
+Router.post('/resend-otp', UserController.resendOtp);
 
 
 
 
 
 //GET EDITORS
-Router.get('/getEditor', Authentication, roleAuth.roleEditorSadmin, UserController.getEditor); 
+Router.get('/getEditor', Authentication, roleAuth.roleEditorSadmin, UserController.getEditor);
 
 //GET ADMINS
 Router.get('/getAdmin', Authentication, roleAuth.roleAdminSadmin, UserController.getAdmin);
 
 //GET CALLERS
-Router.get('/getCaller', Authentication, roleAuth.roleCallerSadmin, UserController.getCaller); 
+Router.get('/getCaller', Authentication, roleAuth.roleCallerSadmin, UserController.getCaller);
 
 //GET CYBERPARTNERS
-Router.get('/getCyberpartner', Authentication, roleAuth.roleCyberSadmin, UserController.getCyberpartner); 
+Router.get('/getCyberpartner', Authentication, roleAuth.roleCyberSadmin, UserController.getCyberpartner);
 
 //GET SUPADMINS
-Router.get('/getSuperadmin', UserController.getSuperadmin); 
+Router.get('/getSuperadmin', UserController.getSuperadmin);
 
 // USER UPDATE
-Router.put('/userUpdate', Authentication, upload.single('image'), UserController.updateUsers); 
+Router.put('/userUpdate', Authentication, upload.single('image'), UserController.updateUsers);
 
 // USER DELETE
-Router.delete('/userDelete', Authentication, UserController.deleteUsers); 
+Router.delete('/userDelete', Authentication, UserController.deleteUsers);
 
 // GET USER BY ROLE
 Router.get('/getAllUser', Authentication, UserController.getAllRoleUsers);
@@ -116,53 +116,55 @@ Router.get('/getAllUser', Authentication, UserController.getAllRoleUsers);
 Router.put('/reset-password', Authentication, UserController.resetPassword);
 
 //SOFT DELETE
-Router.delete('/soft-delete', Authentication, UserController.softDelete); 
+Router.delete('/soft-delete', Authentication, UserController.softDelete);
 
 
 
 
 
 
-{/* college Router */}
+{/* college Router */ }
 
 // College APIs
 Router.get('/profile_detail', Authentication, UserController.profile_detail);
 
-//COLLEGE CREATE
-Router.post("/collegeCreate", Authentication, upload.fields([
-   {
-      name: 'logo', maxCount: 1
-   }, {
-      name: 'featured_img', maxCount: 2
-   },
-   {
-      name: 'broucher', maxCount: 1
-   },
-   {
-      name: 'podcast_hindi', maxCount: 1
-   },
-   {
-      name: 'podcast_eng', maxCount: 1
-   },
-]),
-   clgController.collegeCreate); 
+//COLLEGE CREATE.
+Router.post("/collegeCreate", Authentication, clgController.collegeCreate);
 
+// Router.post("/collegeCreate", Authentication, upload.fields([
+//    {
+//       name: 'logo', maxCount: 1
+//    }, {
+//       name: 'featured_img', maxCount: 2
+//    },
+//    {
+//       name: 'broucher', maxCount: 1
+//    },
+//    {
+//       name: 'podcast_hindi', maxCount: 1
+//    },
+//    {
+//       name: 'podcast_eng', maxCount: 1
+//    },
+// ]),
+//    clgController.collegeCreate); 
 //COLLEGE GET
 Router.get("/getCollegeList", Authentication, clgController.getCollege);
 
 //COLLEGE UPDATE
-Router.put("/updateCollege", Authentication, upload.single('image'), clgController.updateCollege);
+// Router.put("/updateCollege", Authentication, upload.single('image'), clgController.updateCollege);
+Router.put("/updateCollege", Authentication, clgController.updateCollege);
 
- //COLLEGE DELETE
+//COLLEGE DELETE
 Router.delete("/deleteCollege", Authentication, clgController.deleteCollege);
 
 //COLLEGE GET
-Router.get("/getCollegeAffliateApprove", Authentication, clgController.getCollegeAffliateApprove); 
+Router.get("/getCollegeAffliateApprove", Authentication, clgController.getCollegeAffliateApprove);
 
 
 
 
-{/**create category Api */}
+{/**create category Api */ }
 
 //COLLEGE Category POST
 //Router.post("/createCollegeCategory", Authentication, categoryController.createCollegeCategory); 
@@ -190,7 +192,7 @@ Router.put("/updateCollegeCategory", Authentication, upload.fields([
    },
 ]), categoryController.updateCollegeCategory);
 
- //COLLEGE DELETE category
+//COLLEGE DELETE category
 Router.delete("/deleteCollegeCategory", Authentication, categoryController.deleteCollegeCategory);
 
 
@@ -198,46 +200,47 @@ Router.delete("/deleteCollegeCategory", Authentication, categoryController.delet
 
 
 
-{/**status-router */}
+{/**status-router */ }
 
 // status APIs
 
 //STATUS CREATE
-Router.post("/statusCreate", Authentication, statusController.createStatus); 
+Router.post("/statusCreate", Authentication, statusController.createStatus);
 
 //STATUS GET
-Router.get("/statusGet", Authentication, statusController.getStatus); 
+Router.get("/statusGet", Authentication, statusController.getStatus);
 
 //STATUS UPDATE
-Router.put("/statusUpdate", Authentication, statusController.updateStatus); 
+Router.put("/statusUpdate", Authentication, statusController.updateStatus);
 
 //STATUS DELETE
 Router.delete("/statusDelete", Authentication, statusController.deleteStatus);
 
 //CREATE STATUS FOR
-Router.post("/createStatus", Authentication, statusController.createStatusFor); 
+Router.post("/createStatus", Authentication, statusController.createStatusFor);
 
 
 
 
 
 
-{/**property-router */}
+{/**property-type-router */ }
 
-//Property API's
+//Property Type API's
 
 //CREATE PROPERTY TYPE
-Router.post("/createPropertyType", Authentication, upload.single('image'), propertyController.createPropertyType);
+Router.post("/createPropertyType", Authentication, upload.single('image'), PropertyTypeController.createPropertyType);
 
 //GET PROPERTY TYPE
 //COLLEGE GET
-Router.get("/getPropertyType", Authentication, propertyController.getPropertyType); 
+Router.get("/getPropertyType", Authentication, PropertyTypeController.getPropertyType);
 
 
 
 
 
-{/**gallery-router */}
+
+{/**gallery-router */ }
 
 //GALLERY-API
 
@@ -246,125 +249,127 @@ Router.post("/createGallery", Authentication, upload.fields([
    {
       name: 'gallery_img', maxCount: 20
    }
-]),propertyController.createGallery);
+]), PropertyTypeController.createGallery);
 
 //GET GALLERY
-Router.get("/getGallery", Authentication, propertyController.getGallery);
+Router.get("/getGallery", Authentication, PropertyTypeController.getGallery);
 
 
 
 
 
-{/**team-leads-router */}
+{/**team-leads-router */ }
 
 //TEAM-LEAD-API
 
 //CREATE TEAM LEADER
-Router.post("/createTeamLeader", Authentication,upload.single('image'),propertyController.createTeamLeader);
+Router.post("/createTeamLeader", Authentication, upload.single('image'), PropertyTypeController.createTeamLeader);
 
 //UPDATE TEAM LEADER
-Router.put("/updateTeamLeader", Authentication,upload.single('image'),propertyController.updateTeamLeader);
+Router.put("/updateTeamLeader", Authentication, upload.single('image'), PropertyTypeController.updateTeamLeader);
 
 //GET TEAM LEADER
-Router.get("/getTeamLead", Authentication, propertyController.getTeamLead);
+Router.get("/getTeamLead", Authentication, PropertyTypeController.getTeamLead);
 
 
 
 
 
-{/**placement-router */}
+{/**placement-router */ }
 
 //PLACEMENT-API
 
 //CREATE-PLACEMENT
-Router.post("/createPlacement", Authentication,upload.single('image'),propertyController.createPlacement);
+Router.post("/createPlacement", Authentication, upload.single('image'), PropertyTypeController.createPlacement);
 
 //UPDATE-PLACEMENT
-Router.put("/updatePlacement", Authentication,upload.single('image'),propertyController.updatePlacement);
+Router.put("/updatePlacement", Authentication, upload.single('image'), PropertyTypeController.updatePlacement);
 
 //GET-PLACEMENT
-Router.get("/getPlacement", Authentication, propertyController.getPlacement);
+Router.get("/getPlacement", Authentication, PropertyTypeController.getPlacement);
 
 
 
 
 
-{/**loan-router */}
+{/**loan-router */ }
 
 //LOAN_API
 
 //CREATE-LOAN
-Router.post("/createLoan", Authentication,upload.single('image'),propertyController.createLoan);
+Router.post("/createLoan", Authentication, upload.single('image'), PropertyTypeController.createLoan);
 
 //UPDATE-LOAN
-Router.put("/updateLoan", Authentication,upload.single('image'),propertyController.updateLoan);
+Router.put("/updateLoan", Authentication, upload.single('image'), PropertyTypeController.updateLoan);
 
 //GET-LOAN
-Router.get("/getLoan", Authentication, propertyController.getLoan);
+Router.get("/getLoan", Authentication, PropertyTypeController.getLoan);
 
 
 
 
-{/**scholarship-router */}
+{/**scholarship-router */ }
 
 //SCHOLARSHIP-API
 
 //CREATE-SCHOLARSHIP
-Router.post("/createScholarship", Authentication,upload.single('image'),propertyController.createScholarship);
+Router.post("/createScholarship", Authentication, upload.single('image'), PropertyTypeController.createScholarship);
 
 //UPDATE-SCHOLARSHIP
-Router.put("/updateScholarship", Authentication,upload.single('image'),propertyController.updateScholarship);
+Router.put("/updateScholarship", Authentication, upload.single('image'), PropertyTypeController.updateScholarship);
 
 //GET-SCHOLARSHIP
-Router.get("/getScholarship", Authentication, propertyController.getScholarship);
+Router.get("/getScholarship", Authentication, PropertyTypeController.getScholarship);
 
 
 
 
 
-{/**admission-router */}
+{/**admission-router */ }
 
 //ADMISSION-API
 
 //CREATE-ADMISSION
-Router.post("/createAdmission_process", Authentication,upload.single('image'),propertyController.createAdmission_process);
+// Router.post("/createAdmission_process", Authentication,upload.single('image'),PropertyTypeController.createAdmission_process);
+Router.post("/createAdmission_process", Authentication, PropertyTypeController.createAdmission_process);
 
 //UPDATE-ADMISSION
-Router.put("/updateAdmission_process", Authentication,upload.single('image'),propertyController.updateAdmission_process);
+// Router.put("/updateAdmission_process", Authentication,upload.single('image'),PropertyTypeController.updateAdmission_process);
+Router.put("/updateAdmission_process", PropertyTypeController.updateAdmission_process);
 
 //GET-ADMISSION
-Router.get("/getAdmission_process", Authentication, propertyController.getAdmission_process);
+Router.get("/getAdmission_process", Authentication, PropertyTypeController.getAdmission_process);
 
 
 
 
-{/**announcement-router */}
+{/**announcement-router */ }
 
 //ANNOUNCEMENT-API
 
 //CREATE-ANNONCEMENT
-Router.post("/createAnnouncement", Authentication,upload.single('image'),propertyController.createAnnouncement);
+Router.post("/createAnnouncement", Authentication, upload.single('image'), PropertyTypeController.createAnnouncement);
 
 //UPDATE-ANNONCEMENT
-Router.put("/updateAnnouncement", Authentication,upload.single('image'),propertyController.updateAnnouncement);
+Router.put("/updateAnnouncement", Authentication, upload.single('image'), PropertyTypeController.updateAnnouncement);
 
 //GET-ANNONCEMENT
-Router.get("/getAnnouncement", Authentication, propertyController.getAnnouncement);
+Router.get("/getAnnouncement", Authentication, PropertyTypeController.getAnnouncement);
 
 
 
-{/**frequently-asked-question-router */}
+{/**frequently-asked-question-router */ }
 
 //FAQS-API
 
 //CREATE-FAQS
-Router.post("/createFaqs", Authentication,propertyController.createFaqs);
+Router.post("/createFaqs", Authentication, PropertyTypeController.createFaqs);
 
 //UPDATE-FAQS
-Router.put("/updateFaqs", Authentication,propertyController.updateFaqs);
+Router.put("/updateFaqs", Authentication, PropertyTypeController.updateFaqs);
 
 //GET-FAQS
-Router.get("/getFaqs", Authentication, propertyController.getFaqs);
+Router.get("/getFaqs", Authentication, PropertyTypeController.getFaqs);
 
 
 

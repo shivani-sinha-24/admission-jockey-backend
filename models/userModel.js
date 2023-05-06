@@ -16,8 +16,7 @@ const userSchema = new mongoose.Schema({
 
     },
     alt_contact_no: {
-        type: String,
-        allowNull: false
+        type: String
 
     },
     password: {
@@ -29,10 +28,10 @@ const userSchema = new mongoose.Schema({
     },
     image: {
         type: String,
-        get(image) {
+        // get(image) {
 
-            return `${process.env.API_HOST}/${image}`
-        },
+        //     return `${process.env.API_HOST}/${image}`
+        // },
         // default:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA1asRMWrlXo4OqYty4xgM5YmoZ6DjhWhEcw&usqp=CAU"
 
     },

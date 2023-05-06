@@ -39,9 +39,9 @@ export default {
         if (Object.keys(request).length == 0) {
             return res.json(reply.failed("All input is required!"));
         }
-        console.log(req.body, "HKY6m592")
-
-        request.image = req?.file == undefined ? null : req?.file?.filename != undefined && 'public/uploads/' + req?.file?.filename;
+        
+        console.log(req.file, "HKY6m592")
+        request.image = req?.file == undefined ? null : req?.file?.filename != undefined && 'images' + req?.file?.filename;
 
         let validation = new Validator(request, {
             name: 'required|string',
@@ -62,6 +62,7 @@ export default {
         }
 
         try {
+            console.log(request.email)
 
             if (request.role != 0) {
                 let user_email = request.email
@@ -609,7 +610,6 @@ export default {
         try {
             let id = req.query.id
             const user = await User.findByIdAndRemove(id)
-
             if (!user) {
                 return res.status(404).send({ message: "User not found" })
             }

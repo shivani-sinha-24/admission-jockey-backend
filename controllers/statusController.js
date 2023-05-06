@@ -62,7 +62,6 @@ export default {
         try {
             let id = req.query.id
             const status = await Status.findByIdAndRemove(id)
-
             if (!status) {
                 return res.status(404).send({ message: "Status not found" })
             }
@@ -88,7 +87,6 @@ export default {
             if (request.status_for) {
                 Condition.status_for = request.status_for
             }
-            console.log(Condition, "Condition")
 
             let page = parseInt(request.page);
             let limit = parseInt(request.limit)
@@ -96,7 +94,7 @@ export default {
             // const limit = request.limit ? parseInt(request.limit) : 5;
 
             let total = await Status.find(Condition).count()
-
+            
             let pages = Math.ceil(total / limit);
 
             let previousPage = (page <= 1) ? null : (page - 1);

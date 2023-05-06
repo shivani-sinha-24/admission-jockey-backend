@@ -8,10 +8,10 @@ const admission_processModel = new mongoose.Schema({
     description:{
         type: String
     },
-    admission_process_img:{
-        type: String,
-        allowNull: false
-    },
+    // admission_process_img:{
+    //     type: String,
+    //     allowNull: false
+    // },
     property_id:{
         type: String
     },

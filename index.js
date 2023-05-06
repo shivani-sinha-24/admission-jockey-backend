@@ -16,12 +16,17 @@ const app = express();
 
 // app.use(helmet())
 
+// Function to serve all static files
+// inside public directory.
 
 app.use(cors())
 
 app.use(express.json())
 app.use(morgan('dev'))
-app.use(`/public/uploads`, express.static(path.join(__dirname, `uploads`)));
+
+app.use(express.static('public')); 
+app.use('/images', express.static('images'));
+// app.use(`/images`, express.static(path.join(__dirname, `uploads`)));
 conf();
 
 
