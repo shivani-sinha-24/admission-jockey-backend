@@ -39,7 +39,7 @@ export default {
         if (Object.keys(request).length == 0) {
             return res.json(reply.failed("All input is required!"));
         }
-        
+
         console.log(req.file, "HKY6m592")
         request.image = req?.file == undefined ? null : req?.file?.filename != undefined && 'images' + req?.file?.filename;
 
@@ -118,8 +118,8 @@ export default {
             }
 
             const passwordIsvalid = bcrypt.compareSync(request.password, user.password);
-            console.log("reqp:" ,request.password);
-            console.log("userP:" ,user.password);
+            console.log("reqp:", request.password);
+            console.log("userP:", user.password);
 
             console.log(passwordIsvalid);
 
@@ -232,7 +232,7 @@ export default {
             email: 'required|email',
             new_password: 'required|same:confirm_password|min:8',
         });
-        
+
         if (validation.fails()) {
             let err_key = Object.keys(Object.entries(validation.errors)[0][1])[0];
             return res.json(reply.failed(validation.errors.first(err_key)));
@@ -290,15 +290,15 @@ export default {
 
             // IF USER NOT FOUND
             if (!user) {
-            return res.json(reply.failed("Invalid Data!!"));
+                return res.json(reply.failed("Invalid Data!!"));
             }
 
             const password = bcrypt.compareSync(request.old_password, user.password);
 
             //IF PASSWORD INCORRECT
             if (!password) {
-            return res.json(reply.failed("Old Password is Incorrect"));
-            }          
+                return res.json(reply.failed("Old Password is Incorrect"));
+            }
 
             user.password = bcrypt.hashSync(request.new_password);
 
@@ -502,6 +502,12 @@ export default {
         }
     },
 
+    async getUserById(req, res) {
+        let user = await User.findById(req.user._id);
+        return res.status(200).send({ user })
+
+    },
+
     // Get Subadmin
     async getSuperadmin(req, res) {
         try {
@@ -549,53 +555,65 @@ export default {
     async updateUsers(req, res) {
         try {
             let request = req.body
-           console.log("testcheck");
-        
+
             request.image = req?.file == undefined ? null : req?.file?.filename != undefined && 'public/uploads/' + req?.file?.filename;
 
-            console.log(req.body)
-           
             if (!request) {
                 return res.json(reply.failed("All input is required"));
             }
 
-             //let _id =req.query._id;
-             console.log("userType",req.body.type);
-          
+            //let _id =req.query._id;
+            console.log("userType", req.body.type);
 
-            if(req.body.type == "user"){
+
+            if (req.body.type == "user") {
                 const user = await User.findById(req.user._id);
                 if (!user) {
                     return res.json(reply.failed("User not found!!"))
                 }
-    
-             
-                await User.findByIdAndUpdate({
-                    _id:req.user._id
-                },{
-                    $set:{
-                        image:req.image ,
-                        name:req.body.name,
-                        email:req.body.email,
-                        contact_no:req.body.contact_no,
-                        description:req.body. description
-                    }
-                },{
-                    new:true
-                })
 
-            }else if(req.body.type == "property"){
+
+                // await User.findByIdAndUpdate({
+                //     _id: req.user._id
+                // }, {
+                //     $set: {
+                //         image: req.image,
+                //         name: req.body.name,
+                //         email: req.body.email,
+                //         contact_no: req.body.contact_no
+                //     }
+                // }, {
+                //     new: true
+                // })
+                await User.findByIdAndUpdate(req.user._id, request)
+                //////////////////////////////////////////////////////////////////////////
+                var users = await User.findOneAndUpdate(
+                    { _id: req.body.id },
+                    {
+                        $set: {
+                            image: req.image,
+                            name: req.body.name,
+                            email: req.body.email,
+                            contact_no: req.body.contact_no
+                        },
+                    },
+                    { new: true }
+                );
+                return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
+
+
+            } else if (req.body.type == "property") {
                 const user = await College.findById({
-                    _id:req.query._id
+                    _id: req.query._id
                 });
                 if (!user) {
                     return res.json(reply.failed("User not found!!"))
                 }
-                
+
                 await College.findByIdAndUpdate(req.query._id, request)
             }
-          console.log("req",request)
-            return res.status(200).send({status_code: 200, users: request, message: "Users updated successfully."});
+            console.log("req", request)
+            return res.status(200).send({ status_code: 200, users: request, message: "Users updated successfully." });
 
         } catch (err) {
             console.log(err);
@@ -709,16 +727,16 @@ export default {
         }
     },
 
-    profile_detail:async(req,res)=>{
+    profile_detail: async (req, res) => {
         try {
-          var user_detail=  await User.findById({
-                _id:req.user._id
+            var user_detail = await User.findById({
+                _id: req.user._id
             })
 
 
-            if(user_detail){
-                return res.status(200).send({ message: "User detail" ,data:user_detail});
-            }else{
+            if (user_detail) {
+                return res.status(200).send({ message: "User detail", data: user_detail });
+            } else {
                 return res.status(200).send({ message: "Please try again" });
             }
         } catch (error) {
