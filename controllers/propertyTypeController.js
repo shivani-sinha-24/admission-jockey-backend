@@ -459,12 +459,10 @@ export default {
             return res.status(200).send({ status_code: 200, admission_process: admission_process_list, message: "Admission Process created successfully." });
         } catch (err) {
             return res.status(400).send({ message: "Something Went Wrong!" })
-
         }
     },
 
     async updateAdmission_process(req, res) {
-
         let request = req.body;
         // if (request.admission_process_img?.includes("public")) {
         //     request.admission_process_img = request.admission_process_img
