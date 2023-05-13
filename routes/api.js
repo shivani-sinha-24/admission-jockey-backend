@@ -38,7 +38,7 @@ var upload = multer({
 
          if (!file) cb("Image is Required", false);  
 
-         if (file?.fieldname == "image" || req.files.gallery_img || req.files.featured_img) {
+         if (file?.fieldname == "image" || req.files.gallery_img || req.files.featured_img || req.files.logo) {
 
             if (!(file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg")) {
 

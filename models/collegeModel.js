@@ -47,7 +47,7 @@ const collegeSchema = new mongoose.Schema({
     },
     affilite_by: {
         type: String
-    }
+    },
     // approve_by: [{
     //     value: {
     //         type: String,
@@ -69,10 +69,10 @@ const collegeSchema = new mongoose.Schema({
     //         allowNull: false
     //     }
     // }],
-    // logo:{
-    //     type: String,
-    //     allowNull: false
-    // },
+    logo:{
+        type: String,
+        allowNull: false
+    },
     // featured_img:[{
     //     type: String,
     //     allowNull: false

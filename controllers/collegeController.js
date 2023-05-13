@@ -12,12 +12,10 @@ export default {
     // College Create:
     async collegeCreate(req, res) {
         let request = req.body;
-        // console.log(req.files,"files ajay anuj")
-        // request.logo = req?.files == undefined ? null : req?.files?.logo != undefined && 'public/uploads/' + req?.files?.logo[0]?.filename;
+        request.logo = req?.files == undefined ? null : req?.files?.logo != undefined && 'public/uploads/' + req?.files?.logo[0]?.filename;
         // request.featured_img = req?.files == undefined ? null : req?.files?.featured_img != undefined && 'public/uploads/' + req?.files?.featured_img[0]?.filename;
-
-        //request.approve_by = JSON.parse(request.approve_by);
-        //request.affilite_by = JSON.parse(request.affilite_by);
+        // request.approve_by = JSON.parse(request.approve_by);
+        // request.affilite_by = JSON.parse(request.affilite_by);
 
         let exist = await College.findOne({ "email": request.email });
         if (exist) {
