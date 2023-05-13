@@ -374,5 +374,11 @@ Router.put("/updateFaqs", Authentication, PropertyTypeController.updateFaqs);
 Router.get("/getFaqs", Authentication, PropertyTypeController.getFaqs);
 
 
+{/**Question-Answer-router */ }
+
+//QA-API
+
+//GET-QAS
+Router.get("/getQas", Authentication, PropertyTypeController.getQas);
 
 export default Router;

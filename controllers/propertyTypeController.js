@@ -9,6 +9,7 @@ import Scholarship from "../models/scholarshipModel.js";
 import Admission_process from "../models/admission_processModel.js";
 import Announcement from "../models/announcementModel.js";
 import Faqs from "../models/Faqs.js";
+import Qas from "../models/QA.js";
 
 
 export default {
@@ -586,6 +587,19 @@ export default {
             let faqs = await Faqs.find({})
 
             return res.status(200).json(faqs);
+
+        } catch (error) {
+            res.status(400).send(error)
+        }
+    },
+
+
+    // GET QAS
+    async getQas(req, res) {
+        try {
+            let qas = await Qas.find({})
+
+            return res.status(200).json(qas);
 
         } catch (error) {
             res.status(400).send(error)
