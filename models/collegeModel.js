@@ -69,7 +69,7 @@ const collegeSchema = new mongoose.Schema({
     //         allowNull: false
     //     }
     // }],
-    logo:{
+    image:{
         type: String,
         allowNull: false
     },

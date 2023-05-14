@@ -9,7 +9,7 @@ import Scholarship from "../models/scholarshipModel.js";
 import Admission_process from "../models/admission_processModel.js";
 import Announcement from "../models/announcementModel.js";
 import Faqs from "../models/Faqs.js";
-import Qas from "../models/QA.js";
+import Qas from "../models/Qa.js";
 
 
 export default {

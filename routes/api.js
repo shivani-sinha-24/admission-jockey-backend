@@ -131,7 +131,7 @@ Router.post('/getUserById',Authentication,UserController.getUserById);
 Router.get('/profile_detail', Authentication, UserController.profile_detail);
 
 //COLLEGE CREATE.
-Router.post("/collegeCreate", Authentication, clgController.collegeCreate);
+Router.post("/collegeCreate", upload.single('image'), Authentication, clgController.collegeCreate);
 
 // Router.post("/collegeCreate", Authentication, upload.fields([
 //    {

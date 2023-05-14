@@ -12,11 +12,11 @@ export default {
     // College Create:
     async collegeCreate(req, res) {
         let request = req.body;
-        request.logo = req?.files == undefined ? null : req?.files?.logo != undefined && 'public/uploads/' + req?.files?.logo[0]?.filename;
+        // request.logo = req?.files == undefined ? null : req?.files?.logo != undefined && 'images/' + req?.files?.logo[0]?.filename;
+        request.image = req?.file == undefined ? null : 'images/' + req?.file?.filename;
         // request.featured_img = req?.files == undefined ? null : req?.files?.featured_img != undefined && 'public/uploads/' + req?.files?.featured_img[0]?.filename;
         // request.approve_by = JSON.parse(request.approve_by);
         // request.affilite_by = JSON.parse(request.affilite_by);
-
         let exist = await College.findOne({ "email": request.email });
         if (exist) {
             return res.status(200).send({ message: 'This email and contact number is already exists!' });
