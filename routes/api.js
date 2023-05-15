@@ -32,13 +32,10 @@ var upload = multer({
          fileSize:'5mb' 
         }, 
    fileFilter: (req, file, cb) => {
-      //console.log("req1",req.file);
-      //console.log("req.files",req.files);
-      //console.log("logo",req.files.logo);
 
          if (!file) cb("Image is Required", false);  
 
-         if (file?.fieldname == "image" || req.files.gallery_img || req.files.featured_img || req.files.logo) {
+         if (file?.fieldname == "image"|| file?.fieldname == "logo"|| req.files.gallery_img || req.files.featured_img || req.files.logo) {
 
             if (!(file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg")) {
 
@@ -173,14 +170,15 @@ Router.get("/getCollegeAffliateApprove", Authentication, clgController.getColleg
 
 
 //COLLEGE CREATE
-Router.post("/createCollegeCategory", Authentication, upload.fields([
+Router.post("/createCategory", Authentication, upload.fields([
+   {
+      name: 'image', maxCount: 1
+   },
    {
       name: 'logo', maxCount: 1
-   }, {
-      name: 'featured_img', maxCount: 2
-   },
+   }
 ]),
-   categoryController.createCollegeCategory);
+   categoryController.createCategory);
 
 //COLLEGE GET Category
 Router.get("/getCollegeCategory", Authentication, categoryController.getCollegeCategory);
@@ -249,7 +247,7 @@ Router.get("/getPropertyType", Authentication, PropertyTypeController.getPropert
 //CREATE-GALLERY
 Router.post("/createGallery", Authentication, upload.fields([
    {
-      name: 'gallery_img', maxCount: 20
+      name: 'gallery_img', maxCount: 8
    }
 ]), PropertyTypeController.createGallery);
 

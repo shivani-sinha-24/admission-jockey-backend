@@ -1,4 +1,4 @@
-import CategoryModal from "../models/categoryModal.js";
+import Category from "../models/categoryModal.js";
 // import Validator from "validatorjs";
 import reply from '../common/reply.js';
 import Status from "../models/statusModel.js";
@@ -8,16 +8,20 @@ import Status from "../models/statusModel.js";
 export default {
 
     //College Category create
-    async createCollegeCategory(req, res) {
+    async createCategory(req, res) {
 
         let request = req.body;
-
         // console.log("req :",req.body);
         // console.log(req.files,"files ajay anuj")
-
-        request.logo = req?.files == undefined ? null : req?.files?.logo != undefined && 'public/uploads/' + req?.files?.logo[0]?.filename;
-        request.featured_img = req?.files == undefined ? null : req?.files?.featured_img != undefined && 'public/uploads/' + req?.files?.featured_img[0]?.filename;
-        
+        request.image = req?.file == undefined ? null : 'images/' + req?.file?.filename;
+        // request.image = req?.file == undefined ? null : 'images/' + req?.file?.filename;
+        // request.logo = req?.file == undefined ? null : 'images/' + req?.file?.filename;
+        // request.logo = req?.files == undefined ? null : req?.files?.logo != undefined && 'public/uploads/' + req?.files?.logo[0]?.filename;
+        // request.featured_img = req?.files == undefined ? null : req?.files?.featured_img != undefined && 'public/uploads/' + req?.files?.featured_img[0]?.filename;
+        let exist = await Category.findOne({ "name": request.name });
+        if (exist) {
+            return res.status(200).send({ message: 'This name is already exists!' });
+        }
         //request.approve_by = JSON.parse(request.approve_by);
         //request.affilite_by = JSON.parse(request.affilite_by);
         
@@ -28,13 +32,10 @@ export default {
         // }
 
         try {
-
-            let category = await CategoryModal.create(request)
-            return res.status(200).send({status_code:200,category:category, message:"College category created successfully."});
-
+            let category = await Category.create(request);
+            return res.status(200).send({status_code:200, category:category, message:"Category created successfully."});
         } catch (err) {
             return res.status(400).send({ message: "Something Went Wrong!" })
-
         }
     },
 

@@ -1,0 +1,26 @@
+[{
+  "_id": {
+    "$oid": "645f2550a6ed1137d294ea9a"
+  },
+  "ques": "What is the Q&A mean?",
+  "answer": "Britannica Dictionary definition of Q AND A. [count] : a period of time or an occasion when someone answers questions that are asked by a reporter, by the people in an audience, etc. There will be a brief Q and A following the speech.",
+  "property_id": "64514cb21e25851c7e9e54dc",
+  "updated_at": {
+    "$date": "2023-05-12T12:22:15.417Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "645f2596a6ed1137d294ea9b"
+  },
+  "ques": "What's a good Q&A question?",
+  "answer": "Have you ever met someone famous? Would you like to be famous? If you could change one thing that happened, what would it be? If you could live anywhere, where would that be?",
+  "property_id": "64514cb21e25851c7e9e54dc",
+  "created_at": {
+    "$date": "2023-05-04T17:52:17.372Z"
+  },
+  "updated_at": {
+    "$date": "2023-05-12T12:22:15.417Z"
+  },
+  "__v": 0
+}]
