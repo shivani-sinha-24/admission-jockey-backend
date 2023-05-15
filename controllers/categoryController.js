@@ -9,31 +9,16 @@ export default {
 
     //College Category create
     async createCategory(req, res) {
-
         let request = req.body;
-        // console.log("req :",req.body);
-        // console.log(req.files,"files ajay anuj")
-        request.image = req?.file == undefined ? null : 'images/' + req?.file?.filename;
-        // request.image = req?.file == undefined ? null : 'images/' + req?.file?.filename;
-        // request.logo = req?.file == undefined ? null : 'images/' + req?.file?.filename;
-        // request.logo = req?.files == undefined ? null : req?.files?.logo != undefined && 'public/uploads/' + req?.files?.logo[0]?.filename;
-        // request.featured_img = req?.files == undefined ? null : req?.files?.featured_img != undefined && 'public/uploads/' + req?.files?.featured_img[0]?.filename;
+        request.image = 'images/' + req?.files['image'][0]?.filename;
+        request.logo = 'images/' + req?.files['logo'][0]?.filename;
         let exist = await Category.findOne({ "name": request.name });
         if (exist) {
             return res.status(200).send({ message: 'This name is already exists!' });
         }
-        //request.approve_by = JSON.parse(request.approve_by);
-        //request.affilite_by = JSON.parse(request.affilite_by);
-        
-        // let exist = await CategoryModal.findOne({ "email": request.email });
-
-        // if (exist) {
-        //     return res.status(200).send({ message: 'This email and contact number is already exists!' });
-        // }
-
         try {
             let category = await Category.create(request);
-            return res.status(200).send({status_code:200, category:category, message:"Category created successfully."});
+            return res.status(200).send({ status_code: 200, category: category, message: "Category created successfully." });
         } catch (err) {
             return res.status(400).send({ message: "Something Went Wrong!" })
         }
@@ -44,10 +29,10 @@ export default {
     async getCollegeCategory(req, res) {
         try {
 
-         let categories = await CategoryModal.find({});
-         let tab_status = await Status.find({ status_for: "2" });
-           
-         return res.status(200).send({  categories: categories,tab_status:tab_status})
+            let categories = await CategoryModal.find({});
+            let tab_status = await Status.find({ status_for: "2" });
+
+            return res.status(200).send({ categories: categories, tab_status: tab_status })
 
         } catch (err) {
             console.log(err, "error");
@@ -83,7 +68,7 @@ export default {
 
             await CategoryModal.findByIdAndUpdate(_id, request)
             //console.log("request",request);
-            return res.status(200).send({status_code:200,category:request,message:"College category updated successfully."})
+            return res.status(200).send({ status_code: 200, category: request, message: "College category updated successfully." })
 
         } catch (err) {
             console.log(err);
@@ -92,7 +77,7 @@ export default {
 
     },
 
-    
+
     // Delete College:
     async deleteCollegeCategory(req, res) {
         try {

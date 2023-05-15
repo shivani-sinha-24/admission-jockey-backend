@@ -7,10 +7,10 @@ const categorySchema = new mongoose.Schema({
         type: String,
         allowNull: false
     },
-    // logo: {
-    //     type: String,
-    //     allowNull: false
-    // },
+    logo: {
+        type: String,
+        allowNull: false
+    },
     image: {
         type: String,
         allowNull: false

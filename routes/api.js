@@ -24,35 +24,69 @@ var storage = multer.diskStorage({
    }
 });
 
+const upload = multer({ storage: storage })
 
-var upload = multer({
-   storage: storage ,
+// var upload = multer({
+//    storage: storage,
+//    limits:
+//    {
+//       fileSize: '5mb'
+//    },
+//    fileFilter: (req, file, cb) => {
+
+//       if (!file) cb("Image is Required", false);
+
+//       if (  file?.fieldname == "image" || req.files.gallery_img || req.files.featured_img ) {
+
+//          if (!(file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg")) {
+
+//             if (!(file.mimetype == "video/mp4" || file.mimetype == "MPEG-4")) {
+
+//                if (file.mimetype == "application/pdf") cb(null, true);
+
+//                else cb("Only .pdf format allowed!", false);
+
+//             } cb(null, true);
+//             //else cb("Only mp4 format allowed!", false);
+
+//          } cb(null, true);
+//          //else cb("Only .png, .jpg and .jpeg format allowed!", false);
+//       }
+//       cb(null, true);
+//    }
+
+// });
+
+
+var upload1 = multer({
+   storage: storage,
    limits:
-        { 
-         fileSize:'5mb' 
-        }, 
+   {
+      fileSize: '5mb'
+   },
    fileFilter: (req, file, cb) => {
 
-         if (!file) cb("Image is Required", false);  
+      if (!file) cb("Image is Required", false);
+      console.log(file?.fieldname,"file?.fieldname");
 
-         if (file?.fieldname == "image"|| file?.fieldname == "logo"|| req.files.gallery_img || req.files.featured_img || req.files.logo) {
+      if ( file?.fieldname == "logo" || req.files.gallery_img || req.files.featured_img ) {
 
-            if (!(file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg")) {
+         if (!(file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg")) {
 
-               if (!(file.mimetype == "video/mp4" || file.mimetype == "MPEG-4")) {
+            if (!(file.mimetype == "video/mp4" || file.mimetype == "MPEG-4")) {
 
-                  if (file.mimetype == "application/pdf") cb(null, true);
+               if (file.mimetype == "application/pdf") cb(null, true);
 
-                  else cb("Only .pdf format allowed!", false);
+               else cb("Only .pdf format allowed!", false);
 
-               } cb(null, true);
-               //else cb("Only mp4 format allowed!", false);
+            } cb(null, true);
+            //else cb("Only mp4 format allowed!", false);
 
-            } cb(null, true);        
-              //else cb("Only .png, .jpg and .jpeg format allowed!", false);
-         }
-         cb(null, true);
+         } cb(null, true);
+         //else cb("Only .png, .jpg and .jpeg format allowed!", false);
       }
+      cb(null, true);
+   }
 
 });
 
@@ -61,7 +95,7 @@ var upload = multer({
 // ##### User-Router #####
 
 //USER CREATE
-Router.post("/userCreate",upload.single('image'), UserController.userRegister);
+Router.post("/userCreate", upload.single('image'), UserController.userRegister);
 
 //USER LOGIN
 Router.post("/userLogin", UserController.userLogin);
@@ -116,7 +150,7 @@ Router.put('/reset-password', Authentication, UserController.resetPassword);
 Router.delete('/soft-delete', Authentication, UserController.softDelete);
 
 //GET USER BY ID
-Router.post('/getUserById',Authentication,UserController.getUserById);
+Router.post('/getUserById', Authentication, UserController.getUserById);
 
 
 
@@ -170,15 +204,17 @@ Router.get("/getCollegeAffliateApprove", Authentication, clgController.getColleg
 
 
 //COLLEGE CREATE
-Router.post("/createCategory", Authentication, upload.fields([
-   {
-      name: 'image', maxCount: 1
-   },
-   {
-      name: 'logo', maxCount: 1
-   }
-]),
-   categoryController.createCategory);
+// Router.post("/createCategory", upload.fields([
+//    {
+//       name: 'image', maxCount: 1
+//    },
+//    {
+//       name: 'logo', maxCount: 1
+//    }
+// ]),
+//    categoryController.createCategory);
+const cpUpload = upload.fields([{ name: 'image', maxCount: 1 }, { name: 'logo', maxCount: 1 }])
+Router.post("/createCategory",cpUpload,categoryController.createCategory);
 
 //COLLEGE GET Category
 Router.get("/getCollegeCategory", Authentication, categoryController.getCollegeCategory);
@@ -191,6 +227,7 @@ Router.put("/updateCollegeCategory", Authentication, upload.fields([
       name: 'featured_img', maxCount: 2
    },
 ]), categoryController.updateCollegeCategory);
+
 
 //COLLEGE DELETE category
 Router.delete("/deleteCollegeCategory", Authentication, categoryController.deleteCollegeCategory);
