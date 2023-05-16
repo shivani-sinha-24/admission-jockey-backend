@@ -230,7 +230,7 @@ Router.put("/updateCollegeCategory", Authentication, upload.fields([
 
 
 //COLLEGE DELETE category
-Router.delete("/deleteCollegeCategory", Authentication, categoryController.deleteCollegeCategory);
+Router.delete("/deleteCategory", Authentication, categoryController.deleteCategory);
 
 
 

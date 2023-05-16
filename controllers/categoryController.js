@@ -79,15 +79,14 @@ export default {
 
 
     // Delete College:
-    async deleteCollegeCategory(req, res) {
+    async deleteCategory(req, res) {
         try {
             let id = req.query.id
-            const category = await CategoryModal.findByIdAndRemove(id)
-
+            const category = await Category.findByIdAndRemove(id)
             if (!category) {
                 return res.status(404).send({ message: "Category not found" })
             }
-            return res.status(200).send({ message: "Category deleted successfully" })
+            return res.status(200).send({ status_code: 200, id:id, message: "Category deleted successfully." })
         } catch (err) {
             console.log(err);
             return res.status(400).send(err)
