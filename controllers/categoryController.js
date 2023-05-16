@@ -26,10 +26,10 @@ export default {
 
 
     // Get Colleges Category
-    async getCollegeCategory(req, res) {
+    async getCategory(req, res) {
         try {
 
-            let categories = await CategoryModal.find({});
+            let categories = await Category.find({});
             let tab_status = await Status.find({ status_for: "2" });
 
             return res.status(200).send({ categories: categories, tab_status: tab_status })

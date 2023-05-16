@@ -642,17 +642,14 @@ export default {
         let request = req.query
         try {
             let Condition = {};
-
             if (request.name) {
                 Condition.name = request.name
             }
             if (request.role) {
                 Condition.role = request.role
             }
-
-
             let page = parseInt(request.page);
-            let limit = parseInt(request.limit)
+            let limit = parseInt(request.limit);
             // const page = request.page ? parseInt(request.page) : 1;
             // const limit = request.limit ? parseInt(request.limit) : 5;
 

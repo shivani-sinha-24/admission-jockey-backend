@@ -217,7 +217,7 @@ const cpUpload = upload.fields([{ name: 'image', maxCount: 1 }, { name: 'logo', 
 Router.post("/createCategory",cpUpload,categoryController.createCategory);
 
 //COLLEGE GET Category
-Router.get("/getCollegeCategory", Authentication, categoryController.getCollegeCategory);
+Router.get("/getCategory", Authentication, categoryController.getCategory);
 
 //COLLEGE UPDATE Category
 Router.put("/updateCollegeCategory", Authentication, upload.fields([
