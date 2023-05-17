@@ -18,13 +18,12 @@ export default {
         }
         try {
             let parentExit = await Category.findOne({ "name": request.parent });
-            console.log(parentExit);
             if (parentExit) {
-                request.parentCount = parentExit?.parentCount + 1;
-                request.branch = [...parentExit?.branch, req?.body?.name];
+                request.parentCount = parentExit?.parentCount+1;
+                request.branch = [parentExit?.name,...parentExit?.branch];
             } else {
-                request.parentCount = 1;
-                request.branch = [req?.body?.name];
+                request.parentCount = 0;
+                request.branch = [];
             }
             let category = await Category.create(request);
             return res.status(200).send({ status_code: 200, category: category, message: "Category created successfully." });
