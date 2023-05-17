@@ -639,9 +639,9 @@ export default {
 
     // Get All User By Role
     async getAllRoleUsers(req, res) {
-        let request = req.body
+        // let request = req.body;
         try {
-            let Condition = {};
+            // let Condition = {};
             // if (request.name) {
             //     Condition.name = request.name
             // }
@@ -653,18 +653,9 @@ export default {
             // const page = request.page ? parseInt(request.page) : 1;
             // const limit = request.limit ? parseInt(request.limit) : 5;
 
-            let total = await User.find({ is_deleted: false }, Condition).count()
-
-            // let pages = Math.ceil(total / limit);
-
-            // let previousPage = (page <= 1) ? null : (page - 1);
-            // let nextPage = (page >= pages) ? null : (page + 1);
-
+            let total = await User.find({role:req?.body?.role}).count();
             let users = await User.find({role:req?.body?.role}).select("-password");
-
-
             // let tab_status = await Status.find({ status_for: "0" });
-
             return res.status(200).send({ total: total, users })
 
         } catch (err) {
@@ -672,6 +663,11 @@ export default {
             return res.status(400).send(err)
         }
     },
+
+    // async getUsersByRole(req,res){
+    //     console.log("tets")
+    //     console.log(req,"req");
+    // },
 
 
     // Reset Password
