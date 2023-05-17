@@ -17,6 +17,15 @@ export default {
             return res.status(200).send({ message: 'This name is already exists!' });
         }
         try {
+            let parentExit = await Category.findOne({ "name": request.parent });
+            console.log(parentExit);
+            if (parentExit) {
+                request.parentCount = parentExit?.parentCount + 1;
+                request.branch = [...parentExit?.branch, req?.body?.name];
+            } else {
+                request.parentCount = 1;
+                request.branch = [req?.body?.name];
+            }
             let category = await Category.create(request);
             return res.status(200).send({ status_code: 200, category: category, message: "Category created successfully." });
         } catch (err) {
@@ -29,10 +38,10 @@ export default {
     async getCategory(req, res) {
         try {
 
-            let categories = await Category.find({});
+            let categories = await Category.find();
             let tab_status = await Status.find({ status_for: "2" });
-
-            return res.status(200).send({ categories: categories, tab_status: tab_status })
+            // return res.status(200).send({ categories: categories, tab_status: tab_status })
+            return res.status(200).json(categories);
 
         } catch (err) {
             console.log(err, "error");
@@ -42,33 +51,29 @@ export default {
 
 
     // Update College
-    async updateCollegeCategory(req, res) {
+    async updateCategory(req, res) {
         try {
-            let request = req.body
-            //console.log(req.body);
-
-            let data = req.files
-            //console.log("data",data);
-            // request.logo = data.logo[0]?.filename;
-            // request.featured_img = data.featured_img[0]?.filename;
-            //console.log(data.logo[0].fieldname);
-
-            request.logo = req?.files == undefined ? null : req?.files?.logo != undefined && 'public/uploads/' + req?.files?.logo[0]?.filename;
-            request.featured_img = req?.files == undefined ? null : req?.files?.featured_img != undefined && 'public/uploads/' + req?.files?.featured_img[0]?.filename;
-
+            let request = req.body;
+            if (req?.files['image'][0]?.filename || req?.files['logo'] == undefined) {
+                request.image = 'images/' + req?.files['image'][0]?.filename;
+            }
+            if (req?.files['logo'][0]?.filename || req?.files['image'] == undefined) {
+                request.logo = 'images/' + req?.files['logo'][0]?.filename;
+            }
+            if (req?.files['image'][0]?.filename && req?.files['logo'][0]?.filename) {
+                request.image = 'images/' + req?.files['image'][0]?.filename;
+                request.logo = 'images/' + req?.files['logo'][0]?.filename;
+            }
             if (!request) {
                 return res.status(400).send({ message: "All Input Field Is Required" });
             }
-
-            let _id = req.body.id
-            const category = await CategoryModal.findById(_id);
+            let _id = req.body.id;
+            const category = await Category.findById(_id);
             if (!category) {
                 return res.status(404).send({ message: "Category Not Found !!" })
             }
-
-            await CategoryModal.findByIdAndUpdate(_id, request)
-            //console.log("request",request);
-            return res.status(200).send({ status_code: 200, category: request, message: "College category updated successfully." })
+            await Category.findByIdAndUpdate(_id, request)
+            return res.status(200).send({ status_code: 200, category: request, message: "Category updated successfully." })
 
         } catch (err) {
             console.log(err);
@@ -86,7 +91,7 @@ export default {
             if (!category) {
                 return res.status(404).send({ message: "Category not found" })
             }
-            return res.status(200).send({ status_code: 200, id:id, message: "Category deleted successfully." })
+            return res.status(200).send({ status_code: 200, id: id, message: "Category deleted successfully." })
         } catch (err) {
             console.log(err);
             return res.status(400).send(err)

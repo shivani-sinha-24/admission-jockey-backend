@@ -639,12 +639,12 @@ export default {
 
     // Get All User By Role
     async getAllRoleUsers(req, res) {
-        let request = req.query
+        let request = req.body
         try {
             let Condition = {};
-            if (request.name) {
-                Condition.name = request.name
-            }
+            // if (request.name) {
+            //     Condition.name = request.name
+            // }
             if (request.role) {
                 Condition.role = request.role
             }

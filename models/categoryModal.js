@@ -15,6 +15,12 @@ const categorySchema = new mongoose.Schema({
         type: String,
         allowNull: false
     },
+    parentCount:{
+        type:Number
+    },
+    branch:{
+        type:Array
+    },
     // featured_img:{
     //     type: String,
     //     allowNull: false

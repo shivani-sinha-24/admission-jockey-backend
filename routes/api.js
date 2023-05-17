@@ -141,7 +141,7 @@ Router.put('/userUpdate', Authentication, upload.single('image'), UserController
 Router.delete('/userDelete', Authentication, UserController.deleteUsers);
 
 // GET USER BY ROLE
-Router.get('/getAllUser', Authentication, UserController.getAllRoleUsers);
+Router.post('/getAllUser', Authentication, UserController.getAllRoleUsers);
 
 //RESET PASSWORD
 Router.put('/reset-password', Authentication, UserController.resetPassword);
@@ -220,13 +220,7 @@ Router.post("/createCategory",cpUpload,categoryController.createCategory);
 Router.get("/getCategory", Authentication, categoryController.getCategory);
 
 //COLLEGE UPDATE Category
-Router.put("/updateCollegeCategory", Authentication, upload.fields([
-   {
-      name: 'logo', maxCount: 1
-   }, {
-      name: 'featured_img', maxCount: 2
-   },
-]), categoryController.updateCollegeCategory);
+Router.put("/updateCategory", Authentication, cpUpload, categoryController.updateCategory);
 
 
 //COLLEGE DELETE category
