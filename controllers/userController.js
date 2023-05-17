@@ -645,27 +645,27 @@ export default {
             // if (request.name) {
             //     Condition.name = request.name
             // }
-            if (request.role) {
-                Condition.role = request.role
-            }
-            let page = parseInt(request.page);
-            let limit = parseInt(request.limit);
+            // if (request.role) {
+            //     Condition.role = request.role
+            // }
+            // let page = parseInt(request.page);
+            // let limit = parseInt(request.limit);
             // const page = request.page ? parseInt(request.page) : 1;
             // const limit = request.limit ? parseInt(request.limit) : 5;
 
             let total = await User.find({ is_deleted: false }, Condition).count()
 
-            let pages = Math.ceil(total / limit);
+            // let pages = Math.ceil(total / limit);
 
-            let previousPage = (page <= 1) ? null : (page - 1);
-            let nextPage = (page >= pages) ? null : (page + 1);
+            // let previousPage = (page <= 1) ? null : (page - 1);
+            // let nextPage = (page >= pages) ? null : (page + 1);
 
-            let users = await User.find(Condition).select("-password").skip((page - 1) * limit).limit(limit);
+            let users = await User.find({role:req?.body?.role}).select("-password");
 
 
-            let tab_status = await Status.find({ status_for: "0" });
+            // let tab_status = await Status.find({ status_for: "0" });
 
-            return res.status(200).send({ total: total, users, tab_status, page: page, per_page: limit, previousPage: previousPage, nextPage: nextPage })
+            return res.status(200).send({ total: total, users })
 
         } catch (err) {
             console.log(err);
@@ -710,10 +710,10 @@ export default {
                 return res.status(400).send({ message: "User does not exist" })
             }
             let is_deleted = true
-            const user_updated = await User.findByIdAndUpdate(_id, { is_deleted: is_deleted })
+            const user_updated = await User.findByIdAndUpdate(_id, { is_deleted: is_deleted });
 
             if (!user_updated) {
-                return res.status(404).send({ message: "User not found" })
+                return res.status(404).send({ message: "User not found" });
             }
             await Token.deleteMany({ user_id: req.user._id })
             return res.status(200).send({ message: "User deleted successfully" });
