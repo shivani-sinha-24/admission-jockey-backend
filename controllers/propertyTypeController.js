@@ -5,6 +5,7 @@ import Gallery from "../models/galleryModel.js";
 import Team_lead from "../models/teamleadModel.js";
 import Placement from "../models/placementModel.js";
 import Loan from "../models/LoanModel.js";
+import UniversityCourse from "../models/universitycourseModel.js";
 import Scholarship from "../models/scholarshipModel.js";
 import Admission_process from "../models/admission_processModel.js";
 import Announcement from "../models/announcementModel.js";
@@ -716,6 +717,7 @@ export default {
 
         }
     },
+<<<<<<< HEAD
 
     // CREATE Other
     async createOther(req, res) {
@@ -738,12 +740,31 @@ export default {
             return res.status(200).send({ status_code: 200, other: other, message: "Other created successfully." });
 
 
+=======
+    // CREATE UNIVERSITY COURSE
+    async createUniversityCourse(req, res) {
+
+        let request = req.body;
+
+        try {
+
+            let exist = await UniversityCourse.findOne({ "name": request.name });
+
+            if (exist) {
+                return res.status(200).send({ message: 'This name is already exists!' });
+            }
+
+            let placement = await UniversityCourse.create(request);
+
+            return res.status(200).send({ status_code: 200, placement: placement, message: "University course created successfully." });
+>>>>>>> 1b6f30e918a582d56088b0e587316463caae0ff7
 
         } catch (err) {
             return res.status(400).send({ message: "Something Went Wrong!" })
 
         }
     },
+<<<<<<< HEAD
  
     //update other
     async updateOther(req, res) {
@@ -807,6 +828,13 @@ export default {
             let other = await Other.find({})
 
             return res.status(200).json(other);
+=======
+    async getUniversityCourse(req, res) {
+        try {
+            let universityCourse = await UniversityCourse.find({})
+
+            return res.status(200).json(universityCourse);
+>>>>>>> 1b6f30e918a582d56088b0e587316463caae0ff7
 
         } catch (error) {
             res.status(400).send(error)
