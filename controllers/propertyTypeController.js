@@ -5,6 +5,7 @@ import Gallery from "../models/galleryModel.js";
 import Team_lead from "../models/teamleadModel.js";
 import Placement from "../models/placementModel.js";
 import Loan from "../models/LoanModel.js";
+import UniversityCourse from "../models/universitycourseModel.js";
 import Scholarship from "../models/scholarshipModel.js";
 import Admission_process from "../models/admission_processModel.js";
 import Announcement from "../models/announcementModel.js";
@@ -656,6 +657,28 @@ export default {
                 { new: true }
             );
             return res.status(200).send({ status_code: 200, "faqs": faqs, message: "Faqs updated successfully." });
+
+        } catch (err) {
+            return res.status(400).send({ message: "Something Went Wrong!" })
+
+        }
+    },
+    // CREATE UNIVERSITY COURSE
+    async createUniversityCourse(req, res) {
+
+        let request = req.body;
+
+        try {
+
+            let exist = await UniversityCourse.findOne({ "name": request.name });
+
+            if (exist) {
+                return res.status(200).send({ message: 'This name is already exists!' });
+            }
+
+            let placement = await UniversityCourse.create(request);
+
+            return res.status(200).send({ status_code: 200, placement: placement, message: "University course created successfully." });
 
         } catch (err) {
             return res.status(400).send({ message: "Something Went Wrong!" })

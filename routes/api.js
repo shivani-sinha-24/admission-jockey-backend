@@ -410,4 +410,16 @@ Router.get("/getFaqs", Authentication, PropertyTypeController.getFaqs);
 //GET-QAS
 Router.get("/getQas", Authentication, PropertyTypeController.getQas);
 
+
+//University-Course
+
+//CREATE-UNIVERSITY_COURSE
+Router.post("/createUniversityCourse", Authentication, PropertyTypeController.createUniversityCourse);
+
+//UPDATE-LOAN
+Router.put("/updateLoan", Authentication, upload.single('image'), PropertyTypeController.updateLoan);
+
+//GET-LOAN
+Router.get("/getLoan", Authentication, PropertyTypeController.getLoan);
+
 export default Router;

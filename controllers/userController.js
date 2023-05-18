@@ -643,7 +643,6 @@ export default {
         try {
             // let Condition = {};
             // if (request.name) {
-            //     Condition.name = request.name
             // }
             // if (request.role) {
             //     Condition.role = request.role
@@ -652,7 +651,6 @@ export default {
             // let limit = parseInt(request.limit);
             // const page = request.page ? parseInt(request.page) : 1;
             // const limit = request.limit ? parseInt(request.limit) : 5;
-
             let total = await User.find({role:req?.body?.role}).count();
             let users = await User.find({role:req?.body?.role}).select("-password");
             // let tab_status = await Status.find({ status_for: "0" });
