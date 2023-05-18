@@ -10,6 +10,7 @@ import Admission_process from "../models/admission_processModel.js";
 import Announcement from "../models/announcementModel.js";
 import Faqs from "../models/Faqs.js";
 import Qas from "../models/QA.js";
+import Other from "../models/OthersModal.js";
 
 
 export default {
@@ -49,6 +50,59 @@ export default {
             res.status(400).send(error)
         }
     },
+
+    //Update propertyType
+  async updatePropertyType(req, res) {
+    try {
+      let request = req.body;
+      if (!request) {
+        return res.send("All input is required!");
+      }
+
+      let _id = req.query.id;
+      const property = await PropertyType.findById(_id);
+      if (!property) {
+        return res.status(400).send({ message: "Property not found" });
+      }
+
+      await PropertyType.findByIdAndUpdate(_id, request);
+      const property1 = await PropertyType.find();
+      //console.log("property1", property1);
+      return res
+        .status(200)
+        .send({
+          status_code: 200,
+          property: property1,
+          message: "Property updated successfully",
+        });
+    } catch (err) {
+      console.log(err);
+      return res.status(400).send(err);
+    }
+  },
+
+  // Delete proprtyType
+  async deletePropertyType(req, res) {
+    try {
+      console.log("delcontroller");
+      let id = req.query.id;
+      const property = await PropertyType.findByIdAndRemove(id);
+
+      if (!property) {
+        return res.status(404).send({ message: "Property not found" });
+      }
+      return res
+        .status(200)
+        .send({
+          status_code: 200,
+          property: property,
+          message: "Property deleted successfully",
+        });
+    } catch (err) {
+      return res.status(400).send(err);
+    }
+  }, 
+  
 
     // GET Gallery 
     async getGallery(req, res) {
@@ -662,5 +716,102 @@ export default {
 
         }
     },
+
+    // CREATE Other
+    async createOther(req, res) {
+
+        let request = req.body;
+        console.log(request);
+    
+        try {
+
+            let exist = await Other.findOne({ "property_id": request.property_id });
+            console.log("exist",exist);
+
+            if (exist) {
+                return res.status(200).send({ message: 'This section is already exists!' });
+            }
+
+            let other = await Other.create(request);
+            console.log("other",other);
+
+            return res.status(200).send({ status_code: 200, other: other, message: "Other created successfully." });
+
+
+
+        } catch (err) {
+            return res.status(400).send({ message: "Something Went Wrong!" })
+
+        }
+    },
+ 
+    //update other
+    async updateOther(req, res) {
+
+        let request = req.body;
+
+        try {
+
+            let exist = await Other.find({ _id: { $ne: request.id } });
+
+            if (!exist) {
+                return res.status(200).send({ message:"Other not Found !" });
+            }
+
+            var other = await Other.findOneAndUpdate(
+                { _id: req.body.id },
+                {
+                    $set: {
+                        naac: request.nacc,
+                        nirf: request.nirf,
+                        nba: request.nba,
+                        bangal_credit_card: request.bangal_credit_card,
+                        cuet: request.cuet,
+                        aj_ranking: request.aj_ranking,
+                    },
+                },
+                { new: true }
+            );
+            return res.status(200).send({ status_code: 200, "other": other, message: "Other updated successfully." });
+
+        } catch (err) {
+            return res.status(400).send({ message: "Something Went Wrong!" })
+
+        }
+    },
+
+    // Delete Other
+  async deleteOther(req, res) {
+    try {
+      let id = req.query.id;
+      const other = await Other.findByIdAndRemove(id);
+
+      if (!other) {
+        return res.status(404).send({ message: "Other not found" });
+      }
+      return res
+        .status(200)
+        .send({
+          status_code: 200,
+          Other: Other,
+          message: "Other deleted successfully",
+        });
+    } catch (err) {
+      return res.status(400).send(err);
+    }
+  }, 
+
+    // GET Other
+    async getOther(req, res) {
+        try {
+            let other = await Other.find({})
+
+            return res.status(200).json(other);
+
+        } catch (error) {
+            res.status(400).send(error)
+        }
+    },
     
 }
+

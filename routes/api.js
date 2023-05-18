@@ -266,6 +266,13 @@ Router.post("/createPropertyType", Authentication, upload.single('image'), Prope
 //COLLEGE GET
 Router.get("/getPropertyType", Authentication, PropertyTypeController.getPropertyType);
 
+//UPDATE PROPERTY TYPE
+Router.put("/updatePropertyType", Authentication, upload.single('image'), PropertyTypeController.updatePropertyType);
+
+//DELETE PROPERTY TYPE
+Router.delete("/deletePropertyType", Authentication, PropertyTypeController.deletePropertyType);
+
+
 
 
 
@@ -409,5 +416,22 @@ Router.get("/getFaqs", Authentication, PropertyTypeController.getFaqs);
 
 //GET-QAS
 Router.get("/getQas", Authentication, PropertyTypeController.getQas);
+
+{/**others-router */ }
+
+//OTHER-API
+
+//Create Other
+Router.post("/createOther", Authentication, PropertyTypeController.createOther);
+
+//Update Other
+Router.put("/updateOther", Authentication, PropertyTypeController.updateOther);
+
+//Delete Other
+Router.delete("/deleteOther", Authentication, PropertyTypeController.deleteOther);
+
+//GET-other
+Router.get("/getOther", Authentication, PropertyTypeController.getOther);
+
 
 export default Router;
