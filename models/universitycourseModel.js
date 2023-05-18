@@ -38,6 +38,10 @@ const universityCourseSchema = new mongoose.Schema({
         allowNull: false
 
     },
+    universityID: {
+        type: String,
+        allowNull: false
+    },
     lateral_entry: {
         type: String
     },

@@ -420,6 +420,6 @@ Router.post("/createUniversityCourse", Authentication, PropertyTypeController.cr
 Router.put("/updateLoan", Authentication, upload.single('image'), PropertyTypeController.updateLoan);
 
 //GET-LOAN
-Router.get("/getLoan", Authentication, PropertyTypeController.getLoan);
+Router.get("/getUniversityCourse", Authentication, PropertyTypeController.getUniversityCourse);
 
 export default Router;

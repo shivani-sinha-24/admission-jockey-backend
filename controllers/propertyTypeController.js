@@ -685,5 +685,15 @@ export default {
 
         }
     },
+    async getUniversityCourse(req, res) {
+        try {
+            let universityCourse = await UniversityCourse.find({})
+
+            return res.status(200).json(universityCourse);
+
+        } catch (error) {
+            res.status(400).send(error)
+        }
+    },
     
 }
