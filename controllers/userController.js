@@ -41,7 +41,7 @@ export default {
         }
 
         console.log(req.file, "HKY6m592")
-        request.image = req?.file == undefined ? null : req?.file?.filename != undefined && 'images' + req?.file?.filename;
+        request.image = req?.file == undefined ? null : req?.file?.filename != undefined && req?.file?.filename;
 
         let validation = new Validator(request, {
             name: 'required|string',
