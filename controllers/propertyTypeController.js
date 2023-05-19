@@ -832,6 +832,7 @@ export default {
     async getUniversityCourse(req, res) {
         try {
             let universityCourse = await UniversityCourse.find({})
+            
 
             return res.status(200).json(universityCourse);
 >>>>>>> 1b6f30e918a582d56088b0e587316463caae0ff7
