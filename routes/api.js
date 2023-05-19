@@ -417,7 +417,6 @@ Router.get("/getFaqs", Authentication, PropertyTypeController.getFaqs);
 //GET-QAS
 Router.get("/getQas", Authentication, PropertyTypeController.getQas);
 
-<<<<<<< HEAD
 {/**others-router */ }
 
 //OTHER-API
@@ -434,7 +433,6 @@ Router.delete("/deleteOther", Authentication, PropertyTypeController.deleteOther
 //GET-other
 Router.get("/getOther", Authentication, PropertyTypeController.getOther);
 
-=======
 
 //University-Course
 
@@ -446,6 +444,4 @@ Router.put("/updateLoan", Authentication, upload.single('image'), PropertyTypeCo
 
 //GET-LOAN
 Router.get("/getUniversityCourse", Authentication, PropertyTypeController.getUniversityCourse);
->>>>>>> 1b6f30e918a582d56088b0e587316463caae0ff7
-
 export default Router;

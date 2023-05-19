@@ -42,7 +42,7 @@ export default {
     },
 
     // Create Status
-    async getPropertyType(req,res) {
+    async getPropertyType(req, res) {
         try {
             let PropertyTypeData = await PropertyType.find();
             return res.status(200).json(PropertyTypeData)
@@ -53,57 +53,57 @@ export default {
     },
 
     //Update propertyType
-  async updatePropertyType(req, res) {
-    try {
-      let request = req.body;
-      if (!request) {
-        return res.send("All input is required!");
-      }
+    async updatePropertyType(req, res) {
+        try {
+            let request = req.body;
+            if (!request) {
+                return res.send("All input is required!");
+            }
 
-      let _id = req.query.id;
-      const property = await PropertyType.findById(_id);
-      if (!property) {
-        return res.status(400).send({ message: "Property not found" });
-      }
+            let _id = req.query.id;
+            const property = await PropertyType.findById(_id);
+            if (!property) {
+                return res.status(400).send({ message: "Property not found" });
+            }
 
-      await PropertyType.findByIdAndUpdate(_id, request);
-      const property1 = await PropertyType.find();
-      //console.log("property1", property1);
-      return res
-        .status(200)
-        .send({
-          status_code: 200,
-          property: property1,
-          message: "Property updated successfully",
-        });
-    } catch (err) {
-      console.log(err);
-      return res.status(400).send(err);
-    }
-  },
+            await PropertyType.findByIdAndUpdate(_id, request);
+            const property1 = await PropertyType.find();
+            //console.log("property1", property1);
+            return res
+                .status(200)
+                .send({
+                    status_code: 200,
+                    property: property1,
+                    message: "Property updated successfully",
+                });
+        } catch (err) {
+            console.log(err);
+            return res.status(400).send(err);
+        }
+    },
 
-  // Delete proprtyType
-  async deletePropertyType(req, res) {
-    try {
-      console.log("delcontroller");
-      let id = req.query.id;
-      const property = await PropertyType.findByIdAndRemove(id);
+    // Delete proprtyType
+    async deletePropertyType(req, res) {
+        try {
+            console.log("delcontroller");
+            let id = req.query.id;
+            const property = await PropertyType.findByIdAndRemove(id);
 
-      if (!property) {
-        return res.status(404).send({ message: "Property not found" });
-      }
-      return res
-        .status(200)
-        .send({
-          status_code: 200,
-          property: property,
-          message: "Property deleted successfully",
-        });
-    } catch (err) {
-      return res.status(400).send(err);
-    }
-  }, 
-  
+            if (!property) {
+                return res.status(404).send({ message: "Property not found" });
+            }
+            return res
+                .status(200)
+                .send({
+                    status_code: 200,
+                    property: property,
+                    message: "Property deleted successfully",
+                });
+        } catch (err) {
+            return res.status(400).send(err);
+        }
+    },
+
 
     // GET Gallery 
     async getGallery(req, res) {
@@ -125,7 +125,7 @@ export default {
     async createGallery(req, res) {
 
         let request = req.body, gallery_img = [];
-        
+
         // request.logo = req?.files == undefined ? null : req?.files?.logo != undefined && 'public/uploads/' + req?.files?.logo[0]?.filename;
         if (req?.files != undefined && req?.files?.gallery_img?.length > 0) {
             for (let i = 0; i < req?.files?.gallery_img?.length; i++) {
@@ -661,12 +661,12 @@ export default {
         }
     },
 
-       // CREATE Faqs
-       async createFaqs(req, res) {
+    // CREATE Faqs
+    async createFaqs(req, res) {
 
         let request = req.body;
         //console.log(request);
-    
+
         try {
 
             let exist = await Faqs.findOne({ "ques": request.ques });
@@ -717,30 +717,31 @@ export default {
 
         }
     },
-<<<<<<< HEAD
 
     // CREATE Other
     async createOther(req, res) {
 
         let request = req.body;
         console.log(request);
-    
+
         try {
 
             let exist = await Other.findOne({ "property_id": request.property_id });
-            console.log("exist",exist);
+            console.log("exist", exist);
 
             if (exist) {
                 return res.status(200).send({ message: 'This section is already exists!' });
             }
 
             let other = await Other.create(request);
-            console.log("other",other);
+            console.log("other", other);
 
             return res.status(200).send({ status_code: 200, other: other, message: "Other created successfully." });
-
-
-=======
+        }
+        catch (err) {
+            return res.status(400).send(err);
+        }
+    },
     // CREATE UNIVERSITY COURSE
     async createUniversityCourse(req, res) {
 
@@ -757,15 +758,13 @@ export default {
             let placement = await UniversityCourse.create(request);
 
             return res.status(200).send({ status_code: 200, placement: placement, message: "University course created successfully." });
->>>>>>> 1b6f30e918a582d56088b0e587316463caae0ff7
 
         } catch (err) {
             return res.status(400).send({ message: "Something Went Wrong!" })
 
         }
     },
-<<<<<<< HEAD
- 
+
     //update other
     async updateOther(req, res) {
 
@@ -776,7 +775,7 @@ export default {
             let exist = await Other.find({ _id: { $ne: request.id } });
 
             if (!exist) {
-                return res.status(200).send({ message:"Other not Found !" });
+                return res.status(200).send({ message: "Other not Found !" });
             }
 
             var other = await Other.findOneAndUpdate(
@@ -802,45 +801,45 @@ export default {
     },
 
     // Delete Other
-  async deleteOther(req, res) {
-    try {
-      let id = req.query.id;
-      const other = await Other.findByIdAndRemove(id);
+    async deleteOther(req, res) {
+        try {
+            let id = req.query.id;
+            const other = await Other.findByIdAndRemove(id);
 
-      if (!other) {
-        return res.status(404).send({ message: "Other not found" });
-      }
-      return res
-        .status(200)
-        .send({
-          status_code: 200,
-          Other: Other,
-          message: "Other deleted successfully",
-        });
-    } catch (err) {
-      return res.status(400).send(err);
-    }
-  }, 
+            if (!other) {
+                return res.status(404).send({ message: "Other not found" });
+            }
+            return res
+                .status(200)
+                .send({
+                    status_code: 200,
+                    Other: Other,
+                    message: "Other deleted successfully",
+                });
+        } catch (err) {
+            return res.status(400).send(err);
+        }
+    },
 
     // GET Other
     async getOther(req, res) {
         try {
             let other = await Other.find({})
-
             return res.status(200).json(other);
-=======
+        } catch (err) {
+            return res.status(400).send(err);
+        }
+    },
+
     async getUniversityCourse(req, res) {
         try {
             let universityCourse = await UniversityCourse.find({})
-            
 
             return res.status(200).json(universityCourse);
->>>>>>> 1b6f30e918a582d56088b0e587316463caae0ff7
-
         } catch (error) {
             res.status(400).send(error)
         }
     },
-    
+
 }
 
