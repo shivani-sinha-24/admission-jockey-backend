@@ -439,9 +439,13 @@ Router.get("/getOther", Authentication, PropertyTypeController.getOther);
 //CREATE-UNIVERSITY_COURSE
 Router.post("/createUniversityCourse", Authentication, PropertyTypeController.createUniversityCourse);
 
-//UPDATE-LOAN
+//UPDATE-UNIVERSITY_COURSE
 Router.put("/updateLoan", Authentication, upload.single('image'), PropertyTypeController.updateLoan);
 
-//GET-LOAN
+//GET-UNIVERSITY_COURSE
 Router.get("/getUniversityCourse", Authentication, PropertyTypeController.getUniversityCourse);
+
+//DELETE-UNIVERSITY_COURSE
+Router.delete("/deleteUniversityCourse", Authentication, PropertyTypeController.deleteUniversityCourse);
+
 export default Router;

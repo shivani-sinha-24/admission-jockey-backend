@@ -755,9 +755,9 @@ export default {
                 return res.status(200).send({ message: 'This name is already exists!' });
             }
 
-            let placement = await UniversityCourse.create(request);
+            let universityCourse = await UniversityCourse.create(request);
 
-            return res.status(200).send({ status_code: 200, placement: placement, message: "University course created successfully." });
+            return res.status(200).send({ status_code: 200, universityCourse: universityCourse, message: "University course created successfully." });
 
         } catch (err) {
             return res.status(400).send({ message: "Something Went Wrong!" })
@@ -838,6 +838,21 @@ export default {
             return res.status(200).json(universityCourse);
         } catch (error) {
             res.status(400).send(error)
+        }
+    },
+
+     // Delete College:
+     async deleteUniversityCourse(req, res) {
+        try {
+            let id = req.query.id
+            const course = await UniversityCourse.findByIdAndRemove(id)
+            if (!course) {
+                return res.status(404).send({ message: "Course not found" })
+            }
+            return res.status(200).send({ status_code: 200, id: id, message: "Course deleted successfully." })
+        } catch (err) {
+            console.log(err);
+            return res.status(400).send(err)
         }
     },
 
