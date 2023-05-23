@@ -448,4 +448,7 @@ Router.get("/getUniversityCourse", Authentication, PropertyTypeController.getUni
 //DELETE-UNIVERSITY_COURSE
 Router.delete("/deleteUniversityCourse", Authentication, PropertyTypeController.deleteUniversityCourse);
 
+//UPDATE-UNIVESITY-COURSE
+Router.put("/updateUniversityCourse", Authentication, PropertyTypeController.updateUniversityCourse);
+
 export default Router;
