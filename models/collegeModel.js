@@ -46,7 +46,7 @@ const collegeSchema = new mongoose.Schema({
         type: String
     },
     affilite_by: {
-        type: String
+        type: Array
     },
     // approve_by: [{
     //     value: {
