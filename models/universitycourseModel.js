@@ -48,6 +48,9 @@ const universityCourseSchema = new mongoose.Schema({
     eligibilty: {
         type: String
     },
+    propertyId: {
+        type: String
+    },
     description: {
         type: String,
         allowNull: false
