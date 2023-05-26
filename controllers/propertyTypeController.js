@@ -6,6 +6,7 @@ import Team_lead from "../models/teamleadModel.js";
 import Placement from "../models/placementModel.js";
 import Loan from "../models/LoanModel.js";
 import UniversityCourse from "../models/universitycourseModel.js";
+import CollegeCourse from "../models/collegeCourseModel.js";
 import Scholarship from "../models/scholarshipModel.js";
 import Admission_process from "../models/admission_processModel.js";
 import Announcement from "../models/announcementModel.js";
@@ -875,6 +876,34 @@ export default {
             return res.status(400).send(err)
         }
 
+    },
+
+
+    async createCollegeCourse(req, res) {
+
+        let request = req.body;
+
+        try {
+
+            let collegeCourse = await CollegeCourse.create(request);
+
+            return res.status(200).send({ status_code: 200, collegeCourse: collegeCourse, message: "College course created successfully." });
+
+        } catch (err) {
+            return res.status(400).send({ message: "Something Went Wrong!" })
+
+        }
+    },
+
+
+    async getCollegeCourse(req, res) {
+        try {
+            let collegeCourse = await CollegeCourse.find({})
+
+            return res.status(200).json(collegeCourse);
+        } catch (error) {
+            res.status(400).send(error)
+        }
     },
 
 }

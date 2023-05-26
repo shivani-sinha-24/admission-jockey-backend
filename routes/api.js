@@ -451,4 +451,14 @@ Router.delete("/deleteUniversityCourse", Authentication, PropertyTypeController.
 //UPDATE-UNIVESITY-COURSE
 Router.put("/updateUniversityCourse", Authentication, PropertyTypeController.updateUniversityCourse);
 
+
+//College-Course
+
+//CREATE-COLLEGE_COURSE
+Router.post("/createCollegeCourse", Authentication, PropertyTypeController.createCollegeCourse);
+
+
+//GET-COLLEGE_COURSE
+Router.get("/getCollegeCourse", Authentication, PropertyTypeController.getCollegeCourse);
+
 export default Router;
