@@ -555,53 +555,28 @@ export default {
     async updateUsers(req, res) {
         try {
             let request = req.body
-
             request.image = req?.file == undefined ? null : req?.file?.filename != undefined && 'public/uploads/' + req?.file?.filename;
-
             if (!request) {
                 return res.json(reply.failed("All input is required"));
             }
-
-            //let _id =req.query._id;
-            console.log("userType", req.body.type);
-
-
             if (req.body.type == "user") {
                 const user = await User.findById(req.user._id);
                 if (!user) {
                     return res.json(reply.failed("User not found!!"))
                 }
-
-
-                // await User.findByIdAndUpdate({
-                //     _id: req.user._id
-                // }, {
-                //     $set: {
-                //         image: req.image,
-                //         name: req.body.name,
-                //         email: req.body.email,
-                //         contact_no: req.body.contact_no
-                //     }
-                // }, {
-                //     new: true
-                // })
-                await User.findByIdAndUpdate(req.user._id, request)
-                //////////////////////////////////////////////////////////////////////////
                 var users = await User.findOneAndUpdate(
-                    { _id: req.body.id },
+                    { _id: req.body._id },
                     {
                         $set: {
                             image: req.image,
                             name: req.body.name,
                             email: req.body.email,
-                            contact_no: req.body.contact_no
+                            contact_no: req.body.contact_no,
+                            tab_status: req.body.tab_status,
                         },
-                    },
-                    { new: true }
+                    }
                 );
                 return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
-
-
             } else if (req.body.type == "property") {
                 const user = await College.findById({
                     _id: req.query._id
@@ -612,7 +587,6 @@ export default {
 
                 await College.findByIdAndUpdate(req.query._id, request)
             }
-            console.log("req", request)
             return res.status(200).send({ status_code: 200, users: request, message: "Users updated successfully." });
 
         } catch (err) {

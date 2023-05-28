@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        default: "1", // 1=Active, 0=notActive
+        default: "Active",
     },
     image: {
         type: String,
@@ -58,8 +58,7 @@ const userSchema = new mongoose.Schema({
         default: false
     },
     tab_status: {
-        type: String,
-        default: "0"
+        type: String
     },
     description:{
         type: String,
