@@ -223,6 +223,8 @@ Router.get("/getCategory", Authentication, categoryController.getCategory);
 //COLLEGE UPDATE Category
 Router.put("/updateCategory", Authentication, cpUpload, categoryController.updateCategory);
 
+//CATEGORY SOFT DELETE
+Router.post("/softDeleteCategory",categoryController.softDeleteCategory);
 
 //COLLEGE DELETE category
 Router.delete("/deleteCategory", Authentication, categoryController.deleteCategory);
@@ -451,5 +453,15 @@ Router.delete("/deleteUniversityCourse", Authentication, PropertyTypeController.
 
 //UPDATE-UNIVESITY-COURSE
 Router.put("/updateUniversityCourse", Authentication, PropertyTypeController.updateUniversityCourse);
+
+
+//College-Course
+
+//CREATE-COLLEGE_COURSE
+Router.post("/createCollegeCourse", Authentication, PropertyTypeController.createCollegeCourse);
+
+
+//GET-COLLEGE_COURSE
+Router.get("/getCollegeCourse", Authentication, PropertyTypeController.getCollegeCourse);
 
 export default Router;

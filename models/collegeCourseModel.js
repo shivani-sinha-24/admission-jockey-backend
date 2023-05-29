@@ -1,13 +1,12 @@
 import mongoose from 'mongoose';
 
 
-const universityCourseSchema = new mongoose.Schema({
+const collegeCourseSchema = new mongoose.Schema({
 
 
     name: {
         type: String,
         allowNull: false
-
     },
     full_name: {
         type: String,
@@ -38,7 +37,7 @@ const universityCourseSchema = new mongoose.Schema({
         allowNull: false
 
     },
-    universityID: {
+    CollegeID: {
         type: String,
         allowNull: false
     },
@@ -48,23 +47,16 @@ const universityCourseSchema = new mongoose.Schema({
     eligibilty: {
         type: String
     },
-    propertyId: {
-        type: String
-    },
     description: {
         type: String,
         allowNull: false
     },
-    // status: {
-    //     type: String,
-    //     default: "1", // 1=Active, 0=inactive
-    // },
 },
 
     { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 
 )
 
-const Universitycourse = mongoose.model('universitycourse', universityCourseSchema)
+const Collegecourse = mongoose.model('collegecourse', collegeCourseSchema)
 
-export default Universitycourse;
+export default Collegecourse;

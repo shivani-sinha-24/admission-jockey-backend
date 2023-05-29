@@ -6,6 +6,7 @@ import Team_lead from "../models/teamleadModel.js";
 import Placement from "../models/placementModel.js";
 import Loan from "../models/LoanModel.js";
 import UniversityCourse from "../models/universitycourseModel.js";
+import CollegeCourse from "../models/collegeCourseModel.js";
 import Scholarship from "../models/scholarshipModel.js";
 import Admission_process from "../models/admission_processModel.js";
 import Announcement from "../models/announcementModel.js";
@@ -854,8 +855,8 @@ export default {
         }
     },
 
-     // Delete College:
-     async deleteUniversityCourse(req, res) {
+    // Delete College:
+    async deleteUniversityCourse(req, res) {
         try {
             let id = req.query.id
             const course = await UniversityCourse.findByIdAndRemove(id)
@@ -878,9 +879,26 @@ export default {
             let _id = req.body.id;
             const course = await UniversityCourse.findById(_id);
             if (!course) {
-                return res.status(404).send({ message: "Category Not Found !!" })
+                return res.status(404).send({ message: "Course Not Found !!" });
             }
-            await UniversityCourse.findByIdAndUpdate(_id, request)
+            await UniversityCourse.findByIdAndUpdate(_id, request);
+            // let collegeCourses = await CollegeCourse.find({ name: request.name });
+            // let clgRequest = {
+            //     name: request.name,
+            //     full_name: request.full_name,
+            //     duration: request.duration,
+            //     type: request.type,
+            //     category: request.category,
+            //     sub_category: request.sub_category,
+            //     stream: request.stream,
+            //     lateral_entry: request.lateral_entry,
+            //     eligibilty: request.eligibilty,
+            //     description: request.description,
+            // }
+            // let updatedCourses = collegeCourses.map(async (clgcors) => {
+            //     await CollegeCourse.findByIdAndUpdate(clgcors._id, clgRequest);
+            // });
+            // console.log(updatedCourses, "updatedCourses");
             return res.status(200).send({ status_code: 200, course: request, message: "Course updated successfully." })
 
         } catch (err) {
@@ -888,6 +906,34 @@ export default {
             return res.status(400).send(err)
         }
 
+    },
+
+
+    async createCollegeCourse(req, res) {
+
+        let request = req.body;
+
+        try {
+
+            let collegeCourse = await CollegeCourse.create(request);
+
+            return res.status(200).send({ status_code: 200, collegeCourse: collegeCourse, message: "College course created successfully." });
+
+        } catch (err) {
+            return res.status(400).send({ message: "Something Went Wrong!" })
+
+        }
+    },
+
+
+    async getCollegeCourse(req, res) {
+        try {
+            let collegeCourse = await CollegeCourse.find({})
+
+            return res.status(200).json(collegeCourse);
+        } catch (error) {
+            res.status(400).send(error)
+        }
     },
 
 }
