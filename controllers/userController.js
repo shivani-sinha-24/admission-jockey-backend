@@ -555,19 +555,16 @@ export default {
     async updateUsers(req, res) {
         try {
             let request = req.body
-
+            const {name,description,id} = req.body
             request.image = req?.file == undefined ? null : req?.file?.filename != undefined && 'public/uploads/' + req?.file?.filename;
 
             if (!request) {
                 return res.json(reply.failed("All input is required"));
             }
 
-            //let _id =req.query._id;
-            console.log("userType", req.body.type);
-
-
+        
             if (req.body.type == "user") {
-                const user = await User.findById(req.user._id);
+                const user = await User.findById({_id:req.user.id});
                 if (!user) {
                     return res.json(reply.failed("User not found!!"))
                 }
@@ -591,15 +588,22 @@ export default {
                     { _id: req.body.id },
                     {
                         $set: {
-                            image: req.image,
-                            name: req.body.name,
-                            email: req.body.email,
-                            contact_no: req.body.contact_no
+                            // image: req.image,
+                            // name: req.body.name,
+                            // email: req.body.email,
+                            // contact_no: req.body.contact_no
+                            image: req.file.filename,
+                            name:req.name,
+                            description:req.description
                         },
                     },
                     { new: true }
                 );
-                return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
+
+                if(users){
+
+                    return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
+                }
 
 
             } else if (req.body.type == "property") {
@@ -619,6 +623,69 @@ export default {
             console.log(err);
             return res.status(400).send(err)
         }
+
+        // const {name,description,id} = req.body
+        // // console.log(name,description,id);
+        // const Users = User.findOne({_id:id})
+        
+        // if(Users){console.log(Users);}
+    },
+
+
+    async updateUsersProfile(req, res) {
+        try {
+            let request = req.body
+            const {name,description,id} = req.body
+            // request.image = req?.file == undefined ? null : req?.file?.filename != undefined && 'public/uploads/' + req?.file?.filename;
+
+            if (!request) {
+                return res.json(reply.failed("All input is required"));
+            }
+
+            //let _id =req.query._id;
+            console.log("userType", req.body.type);
+            console.log(req.file);
+
+            console.log(req.file.filename);
+            console.log(req.body);
+            // if (req.body.type == "user") {
+                const user = await User.findById({_id:req.user.id});
+                if (!user) {
+                    return res.json(reply.failed("User not found!!"))
+                }
+
+                //////////////////////////////////////////////////////////////////////////
+                var users = await User.findOneAndUpdate(
+                    { _id: req.body.id },
+                    {
+                        $set: {
+                            // image: req.image,
+                            // name: req.body.name,
+                            // email: req.body.email,
+                            // contact_no: req.body.contact_no
+                            image: req.file.filename,
+                            name:req.name,
+                            description:req.description
+                        },
+                    },
+                    { new: true }
+                );
+
+                if(users){
+
+                    return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
+                }
+
+        } catch (err) {
+            console.log(err);
+            return res.status(400).send(err)
+        }
+
+        // const {name,description,id} = req.body
+        // // console.log(name,description,id);
+        // const Users = User.findOne({_id:id})
+        
+        // if(Users){console.log(Users);}
     },
 
 
