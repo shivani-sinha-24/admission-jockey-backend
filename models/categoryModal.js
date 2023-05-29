@@ -31,6 +31,9 @@ const categorySchema = new mongoose.Schema({
     },
     name:{
         type:String,
+    },
+    softDelete:{
+        type:Boolean,
     }
     // tab_status: {
     //     type: String,

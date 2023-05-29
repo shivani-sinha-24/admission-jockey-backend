@@ -222,6 +222,8 @@ Router.get("/getCategory", Authentication, categoryController.getCategory);
 //COLLEGE UPDATE Category
 Router.put("/updateCategory", Authentication, cpUpload, categoryController.updateCategory);
 
+//CATEGORY SOFT DELETE
+Router.post("/softDeleteCategory",categoryController.softDeleteCategory);
 
 //COLLEGE DELETE category
 Router.delete("/deleteCategory", Authentication, categoryController.deleteCategory);

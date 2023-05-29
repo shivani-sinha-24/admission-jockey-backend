@@ -19,8 +19,8 @@ export default {
         try {
             let parentExit = await Category.findOne({ "name": request.parent });
             if (parentExit) {
-                request.parentCount = parentExit?.parentCount+1;
-                request.branch = [parentExit?.name,...parentExit?.branch];
+                request.parentCount = parentExit?.parentCount + 1;
+                request.branch = [parentExit?.name, ...parentExit?.branch];
             } else {
                 request.parentCount = 0;
                 request.branch = [];
@@ -96,6 +96,32 @@ export default {
             return res.status(400).send(err)
         }
     },
+
+    // Soft Delete College:
+    async softDeleteCategory(req, res) {
+        try {
+            console.log(req.body, "id");
+            let id = req.body.id;
+            const category = await Category.findById(id);
+            if (!category) {
+                return res.status(404).send({ message: "Category not found" });
+            }
+            const categoryName = category.name;
+            const categories = await Category.find({});
+            const filterCategory= categories.map((cat) => {
+                    
+            });
+            // if (!category) {
+            //     return res.status(404).send({ message: "Category not found" })
+            // }
+            // return res.status(200).send({ status_code: 200, id: id, message: "Category deleted successfully." })
+        } catch (err) {
+            console.log(err);
+            return res.status(400).send(err)
+        }
+    },
+
+
 
 
 
