@@ -135,7 +135,8 @@ Router.get('/getCyberpartner', Authentication, roleAuth.roleCyberSadmin, UserCon
 Router.get('/getSuperadmin', UserController.getSuperadmin);
 
 // USER UPDATE
-Router.put('/userUpdate', Authentication, upload.single('image'), UserController.updateUsers);
+// Router.put('/userUpdate', Authentication, upload.single('image'), UserController.updateUsers);
+Router.put('/userUpdate', Authentication, upload.single('image'), UserController.updateUsersProfile);
 
 // USER DELETE
 Router.delete('/userDelete', Authentication, UserController.deleteUsers);

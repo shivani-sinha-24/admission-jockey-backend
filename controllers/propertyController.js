@@ -9,6 +9,8 @@ import Scholarship from "../models/scholarshipModel.js";
 import Admission_process from "../models/admission_processModel.js";
 import Announcement from "../models/announcementModel.js";
 import Faqs from "../models/Faqs.js";
+import Others from "../models/OthersModal.js";
+
 
 
 export default {
@@ -674,6 +676,23 @@ export default {
 
         }
     },
+
+
+    //GET Others
+    async getOthers(req,res){
+
+    },
+
+    //CREATE Others
+    async createOthers(req,res){
+
+    },
+
+    //UPDATE Others
+    async updateOthers(req,res){
+
+    },
+
 
     
 }

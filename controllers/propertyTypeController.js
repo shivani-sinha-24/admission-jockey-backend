@@ -12,7 +12,9 @@ import Admission_process from "../models/admission_processModel.js";
 import Announcement from "../models/announcementModel.js";
 import Faqs from "../models/Faqs.js";
 import Qas from "../models/QA.js";
-import Other from "../models/OthersModal.js";
+// import Other from "../models/OthersModal.js";
+// import Other from "../models/OtherModel.js";
+import OthersModal from "../models/otherMOdel.js";
 
 
 export default {
@@ -727,17 +729,19 @@ export default {
 
         try {
 
-            let exist = await Other.findOne({ "property_id": request.property_id });
+            let exist = await OthersModal.findOne({ "property_id": request.property_id });
             console.log("exist", exist);
 
             if (exist) {
                 return res.status(200).send({ message: 'This section is already exists!' });
             }
 
-            let other = await Other.create(request);
-            console.log("other", other);
+            let other = await OthersModal.create(request);
+            console.log("others", other);
 
-            return res.status(200).send({ status_code: 200, other: other, message: "Other created successfully." });
+            let others = await OthersModal.find({})
+
+            return res.status(200).send({ status_code: 200,  others, message: "Other created successfully." });
         }
         catch (err) {
             return res.status(400).send(err);
@@ -771,29 +775,36 @@ export default {
 
         let request = req.body;
 
+        console.log(request);
+
         try {
 
-            let exist = await Other.find({ _id: { $ne: request.id } });
+            // let exist = await Other.find({ property_id : request.property_id });
 
-            if (!exist) {
-                return res.status(200).send({ message: "Other not Found !" });
-            }
+            // if (!exist) {
+            //     return res.status(200).send({ message: "Other not Found !" });
+            // }
 
-            var other = await Other.findOneAndUpdate(
-                { _id: req.body.id },
+            const other = await OthersModal.findOneAndUpdate(
+                { property_id: request.property_id },
                 {
                     $set: {
-                        naac: request.nacc,
+                        naac: request.naac,
                         nirf: request.nirf,
                         nba: request.nba,
-                        bangal_credit_card: request.bangal_credit_card,
+                        bengalCreditCard: request.bengalCreditCard,
                         cuet: request.cuet,
                         aj_ranking: request.aj_ranking,
                     },
                 },
                 { new: true }
             );
-            return res.status(200).send({ status_code: 200, "other": other, message: "Other updated successfully." });
+
+            if(other){
+                console.log("other updated: ", other);
+                const others = await OthersModal.find({})
+                return res.status(200).send({ status_code: 200, others, message: "Other updated successfully." });
+            }
 
         } catch (err) {
             return res.status(400).send({ message: "Something Went Wrong!" })
@@ -805,7 +816,7 @@ export default {
     async deleteOther(req, res) {
         try {
             let id = req.query.id;
-            const other = await Other.findByIdAndRemove(id);
+            const other = await OthersModal.findByIdAndRemove(id);
 
             if (!other) {
                 return res.status(404).send({ message: "Other not found" });
@@ -814,7 +825,7 @@ export default {
                 .status(200)
                 .send({
                     status_code: 200,
-                    Other: Other,
+                    Other: other,
                     message: "Other deleted successfully",
                 });
         } catch (err) {
@@ -825,9 +836,11 @@ export default {
     // GET Other
     async getOther(req, res) {
         try {
-            let other = await Other.find({})
-            return res.status(200).json(other);
-        } catch (err) {
+            let others = await OthersModal.find({})
+            if(others){
+                return res.status(200).send({status_code:200 , others: others, message: 'others found successfully'})
+            }
+        } catch (error) {
             return res.status(400).send(err);
         }
     },
