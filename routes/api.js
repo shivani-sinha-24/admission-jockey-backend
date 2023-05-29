@@ -137,6 +137,7 @@ Router.get('/getSuperadmin', UserController.getSuperadmin);
 // USER UPDATE
 // Router.put('/userUpdate', Authentication, upload.single('image'), UserController.updateUsers);
 Router.put('/userUpdate', Authentication, upload.single('image'), UserController.updateUsersProfile);
+Router.put('/userListUpdate', Authentication, upload.single('image'), UserController.updateUsers);
 
 // USER DELETE
 Router.delete('/userDelete', Authentication, UserController.deleteUsers);
