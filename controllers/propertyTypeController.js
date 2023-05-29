@@ -14,7 +14,7 @@ import Faqs from "../models/Faqs.js";
 import Qas from "../models/QA.js";
 // import Other from "../models/OthersModal.js";
 // import Other from "../models/OtherModel.js";
-import OthersModal from "../models/otherMOdel.js";
+import OthersModal from "../models/otherModel.js";
 
 
 export default {

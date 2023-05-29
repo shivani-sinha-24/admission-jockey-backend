@@ -226,7 +226,6 @@ export default {
     // Forget Password 
     async forgetPassword(req, res) {
         let request = req.body;
-        console.log(request);
         let validation = new Validator(request, {
             otp: 'required',
             email: 'required|email',
@@ -576,7 +575,6 @@ export default {
                         },
                     }
                 );
-
                 if(users){
                     console.log()
                     return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });

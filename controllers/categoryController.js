@@ -108,9 +108,13 @@ export default {
             }
             const categoryName = category.name;
             const categories = await Category.find({});
-            const filterCategory= categories.map((cat) => {
-                    
+            const filterCategoryList = [];
+            const filterCategory = categories.map((cat) => {
+                if (cat.name !== categoryName) {
+                    return cat;
+                }
             });
+            console.log(filterCategory,"filterCategory");
             // if (!category) {
             //     return res.status(404).send({ message: "Category not found" })
             // }
