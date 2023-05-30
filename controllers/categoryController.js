@@ -53,10 +53,10 @@ export default {
     async updateCategory(req, res) {
         try {
             let request = req.body;
-            if (req?.files['image'][0]?.filename || req?.files['logo'] == undefined) {
+            if (req?.files['image'][0]?.filename && req?.files['logo'] == undefined) {
                 request.image = 'images/' + req?.files['image'][0]?.filename;
             }
-            if (req?.files['logo'][0]?.filename || req?.files['image'] == undefined) {
+            if (req?.files['logo'][0]?.filename && req?.files['image'] == undefined) {
                 request.logo = 'images/' + req?.files['logo'][0]?.filename;
             }
             if (req?.files['image'][0]?.filename && req?.files['logo'][0]?.filename) {
@@ -97,10 +97,10 @@ export default {
         }
     },
 
+
     // Soft Delete College:
     async softDeleteCategory(req, res) {
         try {
-            console.log(req.body, "id");
             let id = req.body.id;
             const category = await Category.findById(id);
             if (!category) {
@@ -108,17 +108,23 @@ export default {
             }
             const categoryName = category.name;
             const categories = await Category.find({});
-            const filterCategoryList = [];
-            const filterCategory = categories.map((cat) => {
-                if (cat.name !== categoryName) {
-                    return cat;
+            const filterCategoryParent = [];
+            categories.map((cat) => {
+                if (cat.name == categoryName) {
+                    filterCategoryParent.push(cat.id);
                 }
+                cat?.branch.map((item) => {
+                    if (item == categoryName) {
+                        filterCategoryParent.push(cat.id);
+                    }
+                });
             });
-            console.log(filterCategory,"filterCategory");
-            // if (!category) {
-            //     return res.status(404).send({ message: "Category not found" })
-            // }
-            // return res.status(200).send({ status_code: 200, id: id, message: "Category deleted successfully." })
+            await Category.update(
+                { _id: { $in: filterCategoryParent } },
+                { $set: { softDelete: true } },
+                { multi: true }
+            );
+            return res.status(200).send({ status_code: 200, id: id, message: "Category deleted successfully." })
         } catch (err) {
             console.log(err);
             return res.status(400).send(err)
@@ -126,7 +132,22 @@ export default {
     },
 
 
+    // Soft Delete College:
+    async restoreCategory(req, res) {
+        try {
+            let id = req.body.id;
+            await Category.update(
+                { _id: id },
+                { $set: { softDelete: false } },
+                { multi: true }
+            );
+            return res.status(200).send({ status_code: 200, id: id, message: "Category restore successfully." })
+        } catch (err) {
+            console.log(err);
+            return res.status(400).send(err)
+        }
 
+    }
 
 
 }

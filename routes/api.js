@@ -227,6 +227,9 @@ Router.put("/updateCategory", Authentication, cpUpload, categoryController.updat
 //CATEGORY SOFT DELETE
 Router.post("/softDeleteCategory",categoryController.softDeleteCategory);
 
+//CATEGORY RESTORE
+Router.post("/restoreCategory",categoryController.restoreCategory);
+
 //COLLEGE DELETE category
 Router.delete("/deleteCategory", Authentication, categoryController.deleteCategory);
 

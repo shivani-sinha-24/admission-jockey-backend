@@ -21,7 +21,6 @@ export default {
 
     // Create Status
     async createPropertyType(req, res) {
-
         try {
             let request = req.body;
             //console.log("req",req.file);
