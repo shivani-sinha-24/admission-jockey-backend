@@ -740,7 +740,7 @@ export default {
 
             let others = await OthersModal.find({})
 
-            return res.status(200).send({ status_code: 200,  others, message: "Other created successfully." });
+            return res.status(200).send({ status_code: 200, others, message: "Other created successfully." });
         }
         catch (err) {
             return res.status(400).send(err);
@@ -799,7 +799,7 @@ export default {
                 { new: true }
             );
 
-            if(other){
+            if (other) {
                 console.log("other updated: ", other);
                 const others = await OthersModal.find({})
                 return res.status(200).send({ status_code: 200, others, message: "Other updated successfully." });
@@ -836,8 +836,8 @@ export default {
     async getOther(req, res) {
         try {
             let others = await OthersModal.find({})
-            if(others){
-                return res.status(200).send({status_code:200 , others: others, message: 'others found successfully'})
+            if (others) {
+                return res.status(200).send({ status_code: 200, others: others, message: 'others found successfully' })
             }
         } catch (error) {
             return res.status(400).send(err);
@@ -913,7 +913,21 @@ export default {
         let request = req.body;
 
         try {
-
+            const UniversityCourseList = await UniversityCourse.findById(request.UniversityID);
+            if (!UniversityCourseList) {
+                return res.status(404).send({ message: "Course Not Found !!" });
+            }
+            UniversityCourseList?.collegeList.map((universityCourseCheck) => {
+                if (universityCourseCheck == CollegeID) {
+                    return res.status(404).send({ message: "Course Already Exist" });
+                }
+            });
+            let UniversityCourseCollegeList = [...UniversityCourseList?.collegeList, request.CollegeID];
+            await UniversityCourse.update(
+                { _id: { $in: [request.UniversityID] } },
+                { $set: { collegeList: UniversityCourseCollegeList } },
+                { multi: true }
+            );
             let collegeCourse = await CollegeCourse.create(request);
 
             return res.status(200).send({ status_code: 200, collegeCourse: collegeCourse, message: "College course created successfully." });

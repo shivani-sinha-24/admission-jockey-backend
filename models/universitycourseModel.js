@@ -55,6 +55,9 @@ const universityCourseSchema = new mongoose.Schema({
         type: String,
         allowNull: false
     },
+    collegeList: {
+        type: Array
+    }
     // status: {
     //     type: String,
     //     default: "1", // 1=Active, 0=inactive
