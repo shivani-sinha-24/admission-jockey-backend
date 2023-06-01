@@ -468,4 +468,7 @@ Router.post("/createCollegeCourse", Authentication, PropertyTypeController.creat
 //GET-COLLEGE_COURSE
 Router.get("/getCollegeCourse", Authentication, PropertyTypeController.getCollegeCourse);
 
+//UPDATE-UNIVESITY-COURSE
+Router.put("/updateCollegeCourse", Authentication, PropertyTypeController.updateCollegeCourse);
+
 export default Router;

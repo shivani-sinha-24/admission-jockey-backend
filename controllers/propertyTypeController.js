@@ -949,5 +949,27 @@ export default {
         }
     },
 
+    async updateCollegeCourse(req, res) {
+        try {
+            console.log(req.body,"body")
+            let request = req.body;
+            if (!request) {
+                return res.status(400).send({ message: "All Input Field Is Required" });
+            }
+            let _id = req.body.id;
+            const course = await CollegeCourse.findById(_id);
+            if (!course) {
+                return res.status(404).send({ message: "Course Not Found !!" });
+            }
+            await CollegeCourse.findByIdAndUpdate(_id, request);
+            return res.status(200).send({ status_code: 200, course: request, message: "Course updated successfully." })
+
+        } catch (err) {
+            console.log(err);
+            return res.status(400).send(err)
+        }
+
+    },
+
 }
 
