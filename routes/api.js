@@ -135,8 +135,8 @@ Router.get('/getCyberpartner', Authentication, roleAuth.roleCyberSadmin, UserCon
 Router.get('/getSuperadmin', UserController.getSuperadmin);
 
 // USER UPDATE
-// Router.put('/userUpdate', Authentication, upload.single('image'), UserController.updateUsers);
-Router.put('/userUpdate', Authentication, upload.single('image'), UserController.updateUsersProfile);
+Router.put('/userUpdate', Authentication, upload.single('image'), UserController.updateUsers);
+Router.put('/userProfileUpdate', Authentication, upload.single('image'), UserController.updateUsersProfile);
 Router.put('/userListUpdate', Authentication, upload.single('image'), UserController.updateUsers);
 
 // USER DELETE
@@ -267,14 +267,14 @@ Router.post("/createStatus", Authentication, statusController.createStatusFor);
 //Property Type API's
 
 //CREATE PROPERTY TYPE
-Router.post("/createPropertyType", Authentication, upload.single('image'), PropertyTypeController.createPropertyType);
+Router.post("/createPropertyType", Authentication, upload.single('property_img'), PropertyTypeController.createPropertyType);
 
 //GET PROPERTY TYPE
 //COLLEGE GET
 Router.get("/getPropertyType", Authentication, PropertyTypeController.getPropertyType);
 
 //UPDATE PROPERTY TYPE
-Router.put("/updatePropertyType", Authentication, upload.single('image'), PropertyTypeController.updatePropertyType);
+Router.put("/updatePropertyType", Authentication, upload.single('property_img'), PropertyTypeController.updatePropertyType);
 
 //DELETE PROPERTY TYPE
 Router.delete("/deletePropertyType", Authentication, PropertyTypeController.deletePropertyType);

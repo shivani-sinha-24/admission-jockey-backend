@@ -25,8 +25,7 @@ export default {
             let request = req.body;
             //console.log("req",req.file);
 
-            request.property_img = req?.file == undefined ? null : req?.file?.filename != undefined && 'public/uploads/' + req?.file?.filename;
-
+            request.property_img = req?.file == undefined ? null : req?.file?.filename != undefined &&  req?.file?.filename;
             let propertyExsist = await PropertyType.findOne({ property_name: request.property_name })
             if (propertyExsist) {
                 return res.status(200).json({ status_code: 300, "message": "This PropertyType already exsist!" })
@@ -61,14 +60,21 @@ export default {
             if (!request) {
                 return res.send("All input is required!");
             }
-
+            let image = req.file?.filename
             let _id = req.query.id;
             const property = await PropertyType.findById(_id);
             if (!property) {
                 return res.status(400).send({ message: "Property not found" });
             }
 
-            await PropertyType.findByIdAndUpdate(_id, request);
+            if(image){
+                await PropertyType.findByIdAndUpdate(_id,{
+                    request,
+                    property_img: image
+                })
+            }else{
+                await PropertyType.findByIdAndUpdate(_id, request);
+            }
             const property1 = await PropertyType.find();
             //console.log("property1", property1);
             return res
