@@ -226,7 +226,6 @@ export default {
     // Forget Password 
     async forgetPassword(req, res) {
         let request = req.body;
-        console.log(request);
         let validation = new Validator(request, {
             otp: 'required',
             email: 'required|email',
@@ -555,7 +554,7 @@ export default {
     async updateUsers(req, res) {
         try {
             let request = req.body
-            request.image = req?.file == undefined ? null : req?.file?.filename != undefined && 'public/uploads/' + req?.file?.filename;
+            // request.image = req?.file == undefined ? null : req?.file?.filename != undefined && 'public/uploads/' + req?.file?.filename;
             if (!request) {
                 return res.json(reply.failed("All input is required"));
             }
@@ -576,9 +575,8 @@ export default {
                         },
                     }
                 );
-
                 if(users){
-
+                    console.log()
                     return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
                 }
 
@@ -589,7 +587,6 @@ export default {
                 if (!user) {
                     return res.json(reply.failed("User not found!!"))
                 }
-
                 await College.findByIdAndUpdate(req.query._id, request)
             }
             return res.status(200).send({ status_code: 200, users: request, message: "Users updated successfully." });
@@ -598,12 +595,6 @@ export default {
             console.log(err);
             return res.status(400).send(err)
         }
-
-        // const {name,description,id} = req.body
-        // // console.log(name,description,id);
-        // const Users = User.findOne({_id:id})
-        
-        // if(Users){console.log(Users);}
     },
 
     // Update UserProfile

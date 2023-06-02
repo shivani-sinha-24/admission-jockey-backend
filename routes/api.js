@@ -137,6 +137,7 @@ Router.get('/getSuperadmin', UserController.getSuperadmin);
 // USER UPDATE
 Router.put('/userUpdate', Authentication, upload.single('image'), UserController.updateUsers);
 Router.put('/userProfileUpdate', Authentication, upload.single('image'), UserController.updateUsersProfile);
+Router.put('/userListUpdate', Authentication, upload.single('image'), UserController.updateUsers);
 
 // USER DELETE
 Router.delete('/userDelete', Authentication, UserController.deleteUsers);
@@ -225,6 +226,9 @@ Router.put("/updateCategory", Authentication, cpUpload, categoryController.updat
 
 //CATEGORY SOFT DELETE
 Router.post("/softDeleteCategory",categoryController.softDeleteCategory);
+
+//CATEGORY RESTORE
+Router.post("/restoreCategory",categoryController.restoreCategory);
 
 //COLLEGE DELETE category
 Router.delete("/deleteCategory", Authentication, categoryController.deleteCategory);
@@ -463,5 +467,11 @@ Router.post("/createCollegeCourse", Authentication, PropertyTypeController.creat
 
 //GET-COLLEGE_COURSE
 Router.get("/getCollegeCourse", Authentication, PropertyTypeController.getCollegeCourse);
+
+//UPDATE-UNIVESITY-COURSE
+Router.put("/updateCollegeCourse", Authentication, PropertyTypeController.updateCollegeCourse);
+
+//DELETE-UNIVERSITY_COURSE
+Router.delete("/deleteCollegeCourse", Authentication, PropertyTypeController.deleteCollegeCourse);
 
 export default Router;
