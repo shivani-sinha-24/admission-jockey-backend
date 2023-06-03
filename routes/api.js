@@ -452,6 +452,9 @@ Router.put("/updateLoan", Authentication, upload.single('image'), PropertyTypeCo
 //GET-UNIVERSITY_COURSE
 Router.get("/getUniversityCourse", Authentication, PropertyTypeController.getUniversityCourse);
 
+//GET-UNIVERSITY_COURSE
+Router.post("/getUniversityCourseForCollege", Authentication, PropertyTypeController.getUniversityCourseForCollege);
+
 //DELETE-UNIVERSITY_COURSE
 Router.delete("/deleteUniversityCourse", Authentication, PropertyTypeController.deleteUniversityCourse);
 

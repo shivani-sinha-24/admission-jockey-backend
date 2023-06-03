@@ -36,12 +36,9 @@ export default {
     // Get Colleges Category
     async getCategory(req, res) {
         try {
-
             let categories = await Category.find();
             let tab_status = await Status.find({ status_for: "2" });
-            // return res.status(200).send({ categories: categories, tab_status: tab_status })
             return res.status(200).json(categories);
-
         } catch (err) {
             console.log(err, "error");
             return res.status(400).send({ message: "Unable to fetch colleges category datails!" })

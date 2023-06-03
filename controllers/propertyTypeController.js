@@ -25,7 +25,7 @@ export default {
             let request = req.body;
             //console.log("req",req.file);
 
-            request.property_img = req?.file == undefined ? null : req?.file?.filename != undefined &&  req?.file?.filename;
+            request.property_img = req?.file == undefined ? null : req?.file?.filename != undefined && req?.file?.filename;
             let propertyExsist = await PropertyType.findOne({ property_name: request.property_name })
             if (propertyExsist) {
                 return res.status(200).json({ status_code: 300, "message": "This PropertyType already exsist!" })
@@ -67,12 +67,12 @@ export default {
                 return res.status(400).send({ message: "Property not found" });
             }
 
-            if(image){
-                await PropertyType.findByIdAndUpdate(_id,{
+            if (image) {
+                await PropertyType.findByIdAndUpdate(_id, {
                     request,
                     property_img: image
                 })
-            }else{
+            } else {
                 await PropertyType.findByIdAndUpdate(_id, request);
             }
             const property1 = await PropertyType.find();
@@ -852,8 +852,7 @@ export default {
 
     async getUniversityCourse(req, res) {
         try {
-            let universityCourse = await UniversityCourse.find({})
-
+            let universityCourse = await UniversityCourse.find({});
             return res.status(200).json(universityCourse);
         } catch (error) {
             res.status(400).send(error)
@@ -983,7 +982,6 @@ export default {
             let id = req.query.id;
             const courseDetail = await CollegeCourse.findById(id);
             const universityCourseDetail = await UniversityCourse.find({});
-            console.log(courseDetail, "courseDetail");
             let courseName = courseDetail.name;
             let course_id = courseDetail._id;
             let filterlist = universityCourseDetail.filter(item => item?.name == courseName);
@@ -1011,6 +1009,26 @@ export default {
             return res.status(400).send(err)
         }
     },
+
+    //University courses for the college
+    async getUniversityCourseForCollege(req, res) {
+        let universityCourse = await UniversityCourse.find({ universityID: req.body.universityData });
+        if (!universityCourse) {
+            return res.status(404).send({ message: "Course not found" });
+        }
+        let filterlist = [];
+        universityCourse.map((uncrs) => {
+            if (uncrs?.collegeList == 0) {
+                filterlist.push(uncrs);
+            }
+            uncrs?.collegeList.map((clgList) => {
+                if (clgList !== req.body.collegeId) {
+                    filterlist.push(uncrs);
+                }
+            });
+        });
+        return res.status(200).send({ status_code: 200, data: filterlist, message: "Course deleted successfully." })
+    }
 
 }
 
