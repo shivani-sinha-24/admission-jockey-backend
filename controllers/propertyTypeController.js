@@ -916,7 +916,6 @@ export default {
     async createCollegeCourse(req, res) {
 
         let request = req.body;
-
         try {
             const UniversityCourseList = await UniversityCourse.findById(request.UniversityID);
             if (!UniversityCourseList) {

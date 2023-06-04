@@ -1,4 +1,5 @@
 import User from "../models/userModel.js";
+import Teamleader from "../models/userteamleaderModel.js";
 import Status from "../models/statusModel.js";
 import Validator from "validatorjs";
 import bcrypt from 'bcryptjs';
@@ -40,7 +41,6 @@ export default {
             return res.json(reply.failed("All input is required!"));
         }
 
-        console.log(req.file, "HKY6m592")
         request.image = req?.file == undefined ? null : req?.file?.filename != undefined && req?.file?.filename;
 
         let validation = new Validator(request, {
@@ -54,21 +54,18 @@ export default {
         if (validation.fails()) {
             let err_key = Object.keys(Object.entries(validation.errors)[0][1])[0];
             return res.json(reply.failed(validation.errors.first(err_key)));
-
         }
         const exist = await User.findOne({ "email": request.email }).sort('-created_at')
         if (exist && exist.is_deleted == false) {
             return res.json(reply.failed('This email is already exists!'));
         }
-
         try {
-            console.log(request.email)
 
             if (request.role != 0) {
                 let user_email = request.email
                 let random_password = createPassword()
                 let hash_password = bcrypt.hashSync(random_password);
-                Mail.send(user_email, "" + `This is your password "${random_password}"`);
+                // Mail.send(user_email, "" + `This is your password "${random_password}"`);
 
                 if ((exist && exist.is_deleted == true) || !exist) {
                     request.password = hash_password
@@ -559,7 +556,7 @@ export default {
                 return res.json(reply.failed("All input is required"));
             }
             if (req.body.type == "user") {
-                const user = await User.findById({_id:req.user.id});
+                const user = await User.findById({ _id: req.user.id });
                 if (!user) {
                     return res.json(reply.failed("User not found!!"))
                 }
@@ -575,7 +572,7 @@ export default {
                         },
                     }
                 );
-                if(users){
+                if (users) {
                     console.log()
                     return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
                 }
@@ -601,137 +598,137 @@ export default {
     async updateUsersProfile(req, res) {
         try {
             let request = req.body
-            const {name,description,id} = req.body
-            let file= req?.file?.filename
+            const { name, description, id } = req.body
+            let file = req?.file?.filename
 
             if (!request) {
                 return res.json(reply.failed("All input is required"));
             }
             // console.log(name,description,file);
-                const user = await User.findById({_id:req.user.id});
-                if (!user) {
-                    return res.json(reply.failed("User not found!!"))
+            const user = await User.findById({ _id: req.user.id });
+            if (!user) {
+                return res.json(reply.failed("User not found!!"))
+            }
+            if (name && description && file) {
+                const users = await User.findOneAndUpdate(
+                    { _id: req.body.id },
+                    {
+                        $set: {
+                            image: req.file.filename,
+                            name: req.body.name,
+                            description: req.body.description
+                        },
+                    },
+                    { new: true }
+                );
+
+                if (users) {
+
+                    return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
                 }
-                if(name&&description&&file){
-                    const users = await User.findOneAndUpdate(
-                        { _id: req.body.id },
-                        {
-                            $set: {
-                                image: req.file.filename,
-                                name:req.body.name,
-                                description:req.body.description
-                            },
+            } else if (name && !file && !description) {
+                const users = await User.findOneAndUpdate(
+                    { _id: req.body.id },
+                    {
+                        $set: {
+                            // image: req.file.filename,
+                            name: req.body.name,
+                            // description:req.body.description
                         },
-                        { new: true }
-                    );
-    
-                    if(users){
-    
-                        return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
-                    }
-                }else if(name&&!file&&!description){
-                    const users = await User.findOneAndUpdate(
-                        { _id: req.body.id },
-                        {
-                            $set: {
-                                // image: req.file.filename,
-                                name:req.body.name,
-                                // description:req.body.description
-                            },
-                        },
-                        { new: true }
-                    );
-    
-                    if(users){
-    
-                        return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
-                    }
-                }else if(file&&!name&&!description){
-                    const users = await User.findOneAndUpdate(
-                        { _id: req.body.id },
-                        {
-                            $set: {
-                                image: req.file.filename,
-                                // name:req.body.name,
-                                // description:req.body.description
-                            },
-                        },
-                        { new: true }
-                    );
-    
-                    if(users){
-    
-                        return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
-                    }
-                }else if(description&&!name&&!file){
-                    const users = await User.findOneAndUpdate(
-                        { _id: req.body.id },
-                        {
-                            $set: {
-                                // image: req.file.filename,
-                                // name:req.body.name,
-                                description:req.body.description
-                            },
-                        },
-                        { new: true }
-                    );
-    
-                    if(users){
-    
-                        return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
-                    }
-                }else if(name&&file&&!description){
-                    const users = await User.findOneAndUpdate(
-                        { _id: req.body.id },
-                        {
-                            $set: {
-                                image: req.file.filename,
-                                name:req.body.name,
-                                // description:req.body.description
-                            },
-                        },
-                        { new: true }
-                    );
-    
-                    if(users){
-    
-                        return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
-                    }
-                }else if(name&&!file&&description){
-                    const users = await User.findOneAndUpdate(
-                        { _id: req.body.id },
-                        {
-                            $set: {
-                                // image: req.file.filename,
-                                name:req.body.name,
-                                description:req.body.description
-                            },
-                        },
-                        { new: true }
-                    );
-    
-                    if(users){
-    
-                        return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
-                    }
-                }else if(!name&&file&&description){
-                    const users = await User.findOneAndUpdate(
-                        { _id: req.body.id },
-                        {
-                            $set: {
-                                image: req.file.filename,
-                                // name:req.body.name,
-                                description:req.body.description
-                            },
-                        },
-                        { new: true }
-                    );
-    
-                    if(users){
-    
-                        return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
-                    }
+                    },
+                    { new: true }
+                );
+
+                if (users) {
+
+                    return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
                 }
+            } else if (file && !name && !description) {
+                const users = await User.findOneAndUpdate(
+                    { _id: req.body.id },
+                    {
+                        $set: {
+                            image: req.file.filename,
+                            // name:req.body.name,
+                            // description:req.body.description
+                        },
+                    },
+                    { new: true }
+                );
+
+                if (users) {
+
+                    return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
+                }
+            } else if (description && !name && !file) {
+                const users = await User.findOneAndUpdate(
+                    { _id: req.body.id },
+                    {
+                        $set: {
+                            // image: req.file.filename,
+                            // name:req.body.name,
+                            description: req.body.description
+                        },
+                    },
+                    { new: true }
+                );
+
+                if (users) {
+
+                    return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
+                }
+            } else if (name && file && !description) {
+                const users = await User.findOneAndUpdate(
+                    { _id: req.body.id },
+                    {
+                        $set: {
+                            image: req.file.filename,
+                            name: req.body.name,
+                            // description:req.body.description
+                        },
+                    },
+                    { new: true }
+                );
+
+                if (users) {
+
+                    return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
+                }
+            } else if (name && !file && description) {
+                const users = await User.findOneAndUpdate(
+                    { _id: req.body.id },
+                    {
+                        $set: {
+                            // image: req.file.filename,
+                            name: req.body.name,
+                            description: req.body.description
+                        },
+                    },
+                    { new: true }
+                );
+
+                if (users) {
+
+                    return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
+                }
+            } else if (!name && file && description) {
+                const users = await User.findOneAndUpdate(
+                    { _id: req.body.id },
+                    {
+                        $set: {
+                            image: req.file.filename,
+                            // name:req.body.name,
+                            description: req.body.description
+                        },
+                    },
+                    { new: true }
+                );
+
+                if (users) {
+
+                    return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
+                }
+            }
 
         } catch (err) {
             console.log(err);
@@ -769,8 +766,8 @@ export default {
             // let limit = parseInt(request.limit);
             // const page = request.page ? parseInt(request.page) : 1;
             // const limit = request.limit ? parseInt(request.limit) : 5;
-            let total = await User.find({role:req?.body?.role}).count();
-            let users = await User.find({role:req?.body?.role}).select("-password");
+            let total = await User.find({ role: req?.body?.role }).count();
+            let users = await User.find({ role: req?.body?.role }).select("-password");
             // let tab_status = await Status.find({ status_for: "0" });
             return res.status(200).send({ total: total, users })
 
@@ -852,7 +849,30 @@ export default {
             console.log(err);
             return res.status(400).send(err)
         }
-    }
+    },
+
+    createUserTeamLeader: async (req, res) => {
+        try {
+            let request = req.body;
+            await User.findOneAndUpdate({ "name": request.teamLeader }, { "isTeamLeader": true });
+            const records = await User.find().where('name').in(request.team).exec();
+            let idList = records.map((id) => {
+                return id._id.toString();
+            });
+            await User.update(
+                { _id: { $in: [...idList] } },
+                { $set: { underTeam: true } },
+                { multi: true }
+            );
+            let teamLeader = await Teamleader.create(request);
+            return res.status(200).send({ status_code: 200, teamLeader: teamLeader, message: "Team Leader created successfully." });
+
+        } catch (error) {
+            console.log(err);
+            return res.status(400).send(err)
+        }
+    },
+
 
 }
 

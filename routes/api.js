@@ -477,4 +477,11 @@ Router.put("/updateCollegeCourse", Authentication, PropertyTypeController.update
 //DELETE-UNIVERSITY_COURSE
 Router.delete("/deleteCollegeCourse", Authentication, PropertyTypeController.deleteCollegeCourse);
 
+
+
+//Team Leader
+Router.post("/createUserTeamLeader", Authentication, UserController.createUserTeamLeader);
+
+
+
 export default Router;
