@@ -62,6 +62,12 @@ const userSchema = new mongoose.Schema({
     },
     description:{
         type: String,
+    },
+    isTeamLeader:{
+        type: Boolean,
+    },
+    underTeam:{
+        type: Boolean,
     }
 
 },

@@ -14,19 +14,18 @@ import Faqs from "../models/Faqs.js";
 import Qas from "../models/QA.js";
 // import Other from "../models/OthersModal.js";
 // import Other from "../models/OtherModel.js";
-import OthersModal from "../models/otherMOdel.js";
+import OthersModal from "../models/otherModel.js";
 
 
 export default {
 
     // Create Status
     async createPropertyType(req, res) {
-
         try {
             let request = req.body;
             //console.log("req",req.file);
 
-            request.property_img = req?.file == undefined ? null : req?.file?.filename != undefined &&  req?.file?.filename;
+            request.property_img = req?.file == undefined ? null : req?.file?.filename != undefined && req?.file?.filename;
             let propertyExsist = await PropertyType.findOne({ property_name: request.property_name })
             if (propertyExsist) {
                 return res.status(200).json({ status_code: 300, "message": "This PropertyType already exsist!" })
@@ -68,12 +67,12 @@ export default {
                 return res.status(400).send({ message: "Property not found" });
             }
 
-            if(image){
-                await PropertyType.findByIdAndUpdate(_id,{
+            if (image) {
+                await PropertyType.findByIdAndUpdate(_id, {
                     request,
                     property_img: image
                 })
-            }else{
+            } else {
                 await PropertyType.findByIdAndUpdate(_id, request);
             }
             const property1 = await PropertyType.find();
@@ -747,7 +746,7 @@ export default {
 
             let others = await OthersModal.find({})
 
-            return res.status(200).send({ status_code: 200,  others, message: "Other created successfully." });
+            return res.status(200).send({ status_code: 200, others, message: "Other created successfully." });
         }
         catch (err) {
             return res.status(400).send(err);
@@ -806,7 +805,7 @@ export default {
                 { new: true }
             );
 
-            if(other){
+            if (other) {
                 console.log("other updated: ", other);
                 const others = await OthersModal.find({})
                 return res.status(200).send({ status_code: 200, others, message: "Other updated successfully." });
@@ -843,8 +842,8 @@ export default {
     async getOther(req, res) {
         try {
             let others = await OthersModal.find({})
-            if(others){
-                return res.status(200).send({status_code:200 , others: others, message: 'others found successfully'})
+            if (others) {
+                return res.status(200).send({ status_code: 200, others: others, message: 'others found successfully' })
             }
         } catch (error) {
             return res.status(400).send(err);
@@ -853,8 +852,7 @@ export default {
 
     async getUniversityCourse(req, res) {
         try {
-            let universityCourse = await UniversityCourse.find({})
-
+            let universityCourse = await UniversityCourse.find({});
             return res.status(200).json(universityCourse);
         } catch (error) {
             res.status(400).send(error)
@@ -918,9 +916,22 @@ export default {
     async createCollegeCourse(req, res) {
 
         let request = req.body;
-
         try {
-
+            const UniversityCourseList = await UniversityCourse.findById(request.UniversityID);
+            if (!UniversityCourseList) {
+                return res.status(404).send({ message: "Course Not Found !!" });
+            }
+            UniversityCourseList?.collegeList.map((universityCourseCheck) => {
+                if (universityCourseCheck == CollegeID) {
+                    return res.status(404).send({ message: "Course Already Exist" });
+                }
+            });
+            let UniversityCourseCollegeList = [...UniversityCourseList?.collegeList, request.CollegeID];
+            await UniversityCourse.update(
+                { _id: { $in: [request.UniversityID] } },
+                { $set: { collegeList: UniversityCourseCollegeList } },
+                { multi: true }
+            );
             let collegeCourse = await CollegeCourse.create(request);
 
             return res.status(200).send({ status_code: 200, collegeCourse: collegeCourse, message: "College course created successfully." });
@@ -941,6 +952,82 @@ export default {
             res.status(400).send(error)
         }
     },
+
+    async updateCollegeCourse(req, res) {
+        try {
+            console.log(req.body, "body")
+            let request = req.body;
+            if (!request) {
+                return res.status(400).send({ message: "All Input Field Is Required" });
+            }
+            let _id = req.body.id;
+            const course = await CollegeCourse.findById(_id);
+            if (!course) {
+                return res.status(404).send({ message: "Course Not Found !!" });
+            }
+            await CollegeCourse.findByIdAndUpdate(_id, request);
+            return res.status(200).send({ status_code: 200, course: request, message: "Course updated successfully." })
+
+        } catch (err) {
+            console.log(err);
+            return res.status(400).send(err)
+        }
+
+    },
+
+    // Delete College:
+    async deleteCollegeCourse(req, res) {
+        try {
+            let id = req.query.id;
+            const courseDetail = await CollegeCourse.findById(id);
+            const universityCourseDetail = await UniversityCourse.find({});
+            let courseName = courseDetail.name;
+            let course_id = courseDetail._id;
+            let filterlist = universityCourseDetail.filter(item => item?.name == courseName);
+            filterlist.map((item) => {
+                if (item?.collegeList?.length > 0) {
+                    item?.collegeList.map((id) => {
+                        if (id !== course_id) {
+
+                        }
+                    });
+                }
+            });
+            await UniversityCourse.update(
+                { _id: { $in: [request.UniversityID] } },
+                { $set: { collegeList: UniversityCourseCollegeList } },
+                { multi: true }
+            );
+            const course = await CollegeCourse.findByIdAndRemove(id);
+            if (!course) {
+                return res.status(404).send({ message: "Course not found" })
+            }
+            return res.status(200).send({ status_code: 200, id: id, message: "Course deleted successfully." })
+        } catch (err) {
+            console.log(err);
+            return res.status(400).send(err)
+        }
+    },
+
+    //University courses for the college
+    async getUniversityCourseForCollege(req, res) {
+        let universityCourse = await UniversityCourse.find({ universityID: req.body.universityData });
+        if (!universityCourse) {
+            return res.status(404).send({ message: "Course not found" });
+        }
+        let filterlist = [];
+        universityCourse.map((uncrs) => {
+            if (uncrs?.collegeList == 0) {
+                filterlist.push(uncrs);
+            }
+            uncrs?.collegeList.map((clgList) => {
+                if (clgList !== req.body.collegeId) {
+                    filterlist.push(uncrs);
+                }
+            });
+        });
+        return res.status(200).send({ status_code: 200, data: filterlist, message: "Course deleted successfully." })
+    }
 
 }
 
