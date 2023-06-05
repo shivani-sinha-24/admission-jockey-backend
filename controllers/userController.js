@@ -557,13 +557,13 @@ export default {
                 return res.json(reply.failed("All input is required"));
             }
             if (req.body.type == "user") {
-                const user = await User.findById({_id:req.body.id?req.body.id:req.body._id});
+                const user = await User.findById({ _id: req.body.id ? req.body.id : req.body._id });
                 if (!user) {
                     return res.json(reply.failed("User not found!!"))
                 }
-                if(image){
+                if (image) {
                     const users = await User.findOneAndUpdate(
-                        {_id:req.body.id?req.body.id:req.body._id },
+                        { _id: req.body.id ? req.body.id : req.body._id },
                         {
                             $set: {
                                 image: image,
@@ -575,13 +575,13 @@ export default {
                         },
                         { new: true }
                     );
-                    if(users){
+                    if (users) {
                         // console.log("users:",users);
                         return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
                     }
-                }else{
+                } else {
                     const users = await User.findOneAndUpdate(
-                        {_id:req.body.id?req.body.id:req.body._id },
+                        { _id: req.body.id ? req.body.id : req.body._id },
                         {
                             $set: {
                                 name: req.body.name,
@@ -592,8 +592,8 @@ export default {
                         },
                         { new: true }
                     );
-                    if(users){
-                        console.log("users: ",users);
+                    if (users) {
+                        console.log("users: ", users);
                         return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
                     }
                 }
@@ -860,8 +860,6 @@ export default {
             var user_detail = await User.findById({
                 _id: req.user._id
             })
-
-
             if (user_detail) {
                 return res.status(200).send({ message: "User detail", data: user_detail });
             } else {
@@ -876,20 +874,30 @@ export default {
     createUserTeamLeader: async (req, res) => {
         try {
             let request = req.body;
-            await User.findOneAndUpdate({ "name": request.teamLeader }, { "isTeamLeader": true });
+            await User.findOneAndUpdate({ "name": request.teamLeader }, { "isTeamLeader": true, "underTeam": false });
             const records = await User.find().where('name').in(request.team).exec();
             let idList = records.map((id) => {
                 return id._id.toString();
             });
             await User.update(
                 { _id: { $in: [...idList] } },
-                { $set: { underTeam: true } },
+                { $set: { underTeam: true, isTeamLeader: false } },
                 { multi: true }
             );
             let teamLeader = await Teamleader.create(request);
             return res.status(200).send({ status_code: 200, teamLeader: teamLeader, message: "Team Leader created successfully." });
 
         } catch (error) {
+            console.log(err);
+            return res.status(400).send(err)
+        }
+    },
+
+    async getUserTeamLeader(req, res) {
+        try {
+            let teamLeader = await Teamleader.find({});
+            return res.status(200).json(teamLeader);
+        } catch (err) {
             console.log(err);
             return res.status(400).send(err)
         }

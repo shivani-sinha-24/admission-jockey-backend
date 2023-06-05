@@ -482,6 +482,10 @@ Router.delete("/deleteCollegeCourse", Authentication, PropertyTypeController.del
 //Team Leader
 Router.post("/createUserTeamLeader", Authentication, UserController.createUserTeamLeader);
 
+//Get Team Leader
+Router.get("/getUserTeamLeader", Authentication, UserController.getUserTeamLeader);
+
+
 
 
 export default Router;

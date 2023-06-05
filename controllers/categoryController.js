@@ -37,7 +37,6 @@ export default {
     async getCategory(req, res) {
         try {
             let categories = await Category.find();
-            let tab_status = await Status.find({ status_for: "2" });
             return res.status(200).json(categories);
         } catch (err) {
             console.log(err, "error");

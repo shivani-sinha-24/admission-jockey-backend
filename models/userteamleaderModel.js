@@ -5,16 +5,19 @@ const teamLeaderSchema = new mongoose.Schema({
     type: {
         type: String
     },
-    teamLeader:{
-        type:String
+    teamName: {
+        type: String
     },
-    team:{
-        type:Array
+    teamLeader: {
+        type: String
+    },
+    team: {
+        type: Array
     }
-  
+
 },
 
-{ timestamps: {createdAt: 'created_at',updatedAt: 'updated_at'} }
+    { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 
 );
 
