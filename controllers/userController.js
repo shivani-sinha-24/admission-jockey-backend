@@ -551,31 +551,53 @@ export default {
     async updateUsers(req, res) {
         try {
             let request = req.body
-            // request.image = req?.file == undefined ? null : req?.file?.filename != undefined && 'public/uploads/' + req?.file?.filename;
+            request.image = req?.file == undefined ? null : req?.file?.filename != undefined && req?.file?.filename;
+            const image = req?.file?.filename;
             if (!request) {
                 return res.json(reply.failed("All input is required"));
             }
             if (req.body.type == "user") {
-                const user = await User.findById({ _id: req.user.id });
+                const user = await User.findById({_id:req.body.id?req.body.id:req.body._id});
                 if (!user) {
                     return res.json(reply.failed("User not found!!"))
                 }
-                var users = await User.findOneAndUpdate(
-                    { _id: req.body._id },
-                    {
-                        $set: {
-                            image: req.image,
-                            name: req.body.name,
-                            email: req.body.email,
-                            contact_no: req.body.contact_no,
-                            tab_status: req.body.tab_status,
+                if(image){
+                    const users = await User.findOneAndUpdate(
+                        {_id:req.body.id?req.body.id:req.body._id },
+                        {
+                            $set: {
+                                image: image,
+                                name: req.body.name,
+                                email: req.body.email,
+                                contact_no: req.body.contact_no,
+                                tab_status: req.body.tab_status,
+                            },
                         },
+                        { new: true }
+                    );
+                    if(users){
+                        // console.log("users:",users);
+                        return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
                     }
-                );
-                if (users) {
-                    console.log()
-                    return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
+                }else{
+                    const users = await User.findOneAndUpdate(
+                        {_id:req.body.id?req.body.id:req.body._id },
+                        {
+                            $set: {
+                                name: req.body.name,
+                                email: req.body.email,
+                                contact_no: req.body.contact_no,
+                                tab_status: req.body.tab_status,
+                            },
+                        },
+                        { new: true }
+                    );
+                    if(users){
+                        console.log("users: ",users);
+                        return res.status(200).send({ status_code: 200, "users": users, message: "User updated successfully." });
+                    }
                 }
+
 
             } else if (req.body.type == "property") {
                 const user = await College.findById({
