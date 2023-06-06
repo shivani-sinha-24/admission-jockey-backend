@@ -903,6 +903,71 @@ export default {
         }
     },
 
+    deleteUserTeamLeader: async (req, res) => {
+        try {
+            let id = req.query.id;
+            let TeamLead = await Teamleader.findById(id);
+            const TeamLeader = await User.find({ "name": TeamLead.teamLeader });
+            await User.update({ "_id": TeamLeader[0]?._id }, { $unset: { isTeamLeader: "", underTeam: "" } });
+            const records = await User.find().where('name').in(TeamLead.team).exec();
+            let idList = records.map((id) => {
+                return id._id.toString();
+            });
+            idList.map(async (id) => {
+                await User.update({ "_id": id }, { $unset: { isTeamLeader: "", underTeam: "" } });
+            });
+            let teamLeader = await Teamleader.findByIdAndRemove(id);
+            return res.status(200).send({ status_code: 200, teamLeader: teamLeader, message: "Team Leader deleted successfully." });
+        } catch (error) {
+            console.log(err);
+            return res.status(400).send(err)
+        }
+    },
+
+    // Update College
+    async updateTeamLead(req, res) {
+        try {
+            let request = req.body;
+            if (!request) {
+                return res.status(400).send({ message: "All Input Field Is Required" });
+            }
+            let _id = req.body.id;
+            const teamLead = await Teamleader.findById(_id);
+            if (!teamLead) {
+                return res.status(404).send({ message: "Team Lead Not Found !!" })
+            }
+            if (teamLead.teamLeader !== request.teamLeader) {
+                const TeamLeader = await User.find({ "name": teamLead.teamLeader });
+                await User.update({ "_id": TeamLeader[0]?._id }, { $unset: { isTeamLeader: "", underTeam: "" } });
+                console.log(request.teamLeader);
+                await User.findOneAndUpdate({ "name": request.teamLeader }, { "isTeamLeader": true, "underTeam": false });
+            }
+            const removeRecords = await User.find().where('name').in(teamLead.team).exec();
+            let removeIdList = removeRecords.map((id) => {
+                return id._id.toString();
+            });
+            removeIdList.map(async (id) => {
+                await User.update({ "_id": id }, { $unset: { isTeamLeader: "", underTeam: "" } });
+            });
+            const records = await User.find().where('name').in(request.team).exec();
+            let idList = records.map((id) => {
+                return id._id.toString();
+            });
+            await User.update(
+                { _id: { $in: [...idList] } },
+                { $set: { underTeam: true, isTeamLeader: false } },
+                { multi: true }
+            );
+            await Teamleader.findByIdAndUpdate(_id, request);
+            return res.status(200).send({ status_code: 200, category: request, message: "Category updated successfully." })
+
+        } catch (err) {
+            console.log(err);
+            return res.status(400).send(err)
+        }
+
+    },
+
 
 }
 

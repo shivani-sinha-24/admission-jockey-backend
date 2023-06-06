@@ -67,9 +67,9 @@ var upload1 = multer({
    fileFilter: (req, file, cb) => {
 
       if (!file) cb("Image is Required", false);
-      console.log(file?.fieldname,"file?.fieldname");
+      console.log(file?.fieldname, "file?.fieldname");
 
-      if ( file?.fieldname == "logo" || req.files.gallery_img || req.files.featured_img ) {
+      if (file?.fieldname == "logo" || req.files.gallery_img || req.files.featured_img) {
 
          if (!(file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg")) {
 
@@ -216,7 +216,7 @@ Router.get("/getCollegeAffliateApprove", Authentication, clgController.getColleg
 // ]),
 //    categoryController.createCategory);
 const cpUpload = upload.fields([{ name: 'image', maxCount: 1 }, { name: 'logo', maxCount: 1 }])
-Router.post("/createCategory",cpUpload,categoryController.createCategory);
+Router.post("/createCategory", cpUpload, categoryController.createCategory);
 
 //COLLEGE GET Category
 Router.get("/getCategory", Authentication, categoryController.getCategory);
@@ -225,10 +225,10 @@ Router.get("/getCategory", Authentication, categoryController.getCategory);
 Router.put("/updateCategory", Authentication, cpUpload, categoryController.updateCategory);
 
 //CATEGORY SOFT DELETE
-Router.post("/softDeleteCategory",categoryController.softDeleteCategory);
+Router.post("/softDeleteCategory", categoryController.softDeleteCategory);
 
 //CATEGORY RESTORE
-Router.post("/restoreCategory",categoryController.restoreCategory);
+Router.post("/restoreCategory", categoryController.restoreCategory);
 
 //COLLEGE DELETE category
 Router.delete("/deleteCategory", Authentication, categoryController.deleteCategory);
@@ -485,7 +485,11 @@ Router.post("/createUserTeamLeader", Authentication, UserController.createUserTe
 //Get Team Leader
 Router.get("/getUserTeamLeader", Authentication, UserController.getUserTeamLeader);
 
+//Delete Team Leader
+Router.delete("/deleteTeamLead", Authentication, UserController.deleteUserTeamLeader);
 
+//Team Leader update
+Router.post("/updateTeamLead", Authentication, UserController.updateTeamLead);
 
 
 export default Router;
