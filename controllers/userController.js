@@ -967,7 +967,29 @@ export default {
         }
 
     },
+    
+    async updateUserPermision(req, res) {
+        try {
+            let request = req.body;
+            let _id = req.body.userId;
+            const user = await User.findById(_id);
+            if (!user) {
+                return res.status(404).send({ message: "User Not Found !!" })
+            }
+            delete request["userId"];
+            await User.update(
+                { _id: _id },
+                { $set: { permissions: request } },
+                { multi: true }
+            );
+            return res.status(200).send({ status_code: 200, message: "Permission updated successfully." })
 
+        } catch (err) {
+            console.log(err);
+            return res.status(400).send(err)
+        }
+
+    },
 
 }
 

@@ -154,6 +154,9 @@ Router.delete('/soft-delete', Authentication, UserController.softDelete);
 //GET USER BY ID
 Router.post('/getUserById', Authentication, UserController.getUserById);
 
+//Permission Acess
+Router.post("/addUserPermission", Authentication, UserController.updateUserPermision);
+
 
 
 
