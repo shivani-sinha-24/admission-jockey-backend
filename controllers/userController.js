@@ -65,7 +65,7 @@ export default {
                 let user_email = request.email
                 let random_password = createPassword()
                 let hash_password = bcrypt.hashSync(random_password);
-                // Mail.send(user_email, "" + `This is your password "${random_password}"`);
+                Mail.send(user_email, "" + `This is your password "${random_password}"`);
 
                 if ((exist && exist.is_deleted == true) || !exist) {
                     request.password = hash_password
@@ -102,9 +102,7 @@ export default {
         }
 
         try {
-
             const user = await User.findOne({ email: request.email.toString().toLowerCase() }).sort('-created_at');
-            console.log({ user3: user });
 
             if (!user) {
                 return res.json(reply.failed("The selected email is invalid"))
@@ -113,12 +111,10 @@ export default {
             if ((!user || user.is_deleted == true)) {
                 return res.json(reply.failed('User does not exist!'));
             }
-
+            if (user.tab_status == "Inactive") {
+                return res.json(reply.failed("Sorry! Your Acount is deactivated"));
+            }
             const passwordIsvalid = bcrypt.compareSync(request.password, user.password);
-            console.log("reqp:", request.password);
-            console.log("userP:", user.password);
-
-            console.log(passwordIsvalid);
 
             if (!passwordIsvalid) {
                 return res.json(reply.failed("Password Incorrect!"));
@@ -815,7 +811,6 @@ export default {
             let user_email = user.email
             //    let new_password = createPassword()
             //    user.password = bcrypt.hashSync(new_password);
-
             Mail.send(user_email, "" + `This is your link to change password "http://localhost:3000/changePassword/${user._id}"`);
 
             //    let updated = await User.findByIdAndUpdate( { _id: user._id }, { password: user.password })
@@ -967,7 +962,7 @@ export default {
         }
 
     },
-    
+
     async updateUserPermision(req, res) {
         try {
             let request = req.body;
@@ -979,8 +974,7 @@ export default {
             delete request["userId"];
             await User.update(
                 { _id: _id },
-                { $set: { permissions: request } },
-                { multi: true }
+                { $set: { permissions: request } }
             );
             return res.status(200).send({ status_code: 200, message: "Permission updated successfully." })
 
