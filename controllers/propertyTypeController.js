@@ -220,9 +220,9 @@ export default {
 
         let request = req.body;
         //console.log(request);
-        let image = req.file&&req.file.filename;  
-        if(image){
-            request.image = 'images/'+image;
+        let image = req.file && req.file.filename;
+        if (image) {
+            request.image = 'images/' + image;
         }
 
         if (request.team_lead_img?.includes("public")) {
@@ -949,9 +949,35 @@ export default {
 
     async getCollegeCourse(req, res) {
         try {
-            let collegeCourse = await CollegeCourse.find({})
-
-            return res.status(200).json(collegeCourse);
+            let collegeCourse = await CollegeCourse.find({});
+            let universityCourse = await UniversityCourse.find({});
+            let courseList = [];
+            collegeCourse.map((clg_cors) => {
+                universityCourse.map((unv_cors) => {
+                    if (clg_cors.UniversityCourseID == unv_cors._id) {
+                        let data = {
+                            _id: clg_cors._id,
+                            name: unv_cors.name,
+                            full_name: unv_cors.full_name,
+                            duration: unv_cors.duration,
+                            type: unv_cors.type,
+                            fees: clg_cors.fees,
+                            category: unv_cors.category,
+                            sub_category: unv_cors.sub_category,
+                            stream: unv_cors.stream,
+                            universityID: clg_cors.UniversityID,
+                            lateral_entry: unv_cors.lateral_entry,
+                            eligibilty: unv_cors.eligibilty,
+                            description: unv_cors.description,
+                            CollegeID: clg_cors.CollegeID,
+                            created_at: clg_cors.created_at,
+                            updated_at: clg_cors.updated_at,
+                        }
+                        courseList.push(data);
+                    }
+                })
+            })
+            return res.status(200).json(courseList);
         } catch (error) {
             res.status(400).send(error)
         }
@@ -959,7 +985,6 @@ export default {
 
     async updateCollegeCourse(req, res) {
         try {
-            console.log(req.body, "body")
             let request = req.body;
             if (!request) {
                 return res.status(400).send({ message: "All Input Field Is Required" });
@@ -971,7 +996,6 @@ export default {
             }
             await CollegeCourse.findByIdAndUpdate(_id, request);
             return res.status(200).send({ status_code: 200, course: request, message: "Course updated successfully." })
-
         } catch (err) {
             console.log(err);
             return res.status(400).send(err)
@@ -984,29 +1008,18 @@ export default {
         try {
             let id = req.query.id;
             const courseDetail = await CollegeCourse.findById(id);
-            const universityCourseDetail = await UniversityCourse.find({});
-            let courseName = courseDetail.name;
-            let course_id = courseDetail._id;
-            let filterlist = universityCourseDetail.filter(item => item?.name == courseName);
-            filterlist.map((item) => {
-                if (item?.collegeList?.length > 0) {
-                    item?.collegeList.map((id) => {
-                        if (id !== course_id) {
-
-                        }
-                    });
-                }
-            });
+            const universityCourseDetail = await UniversityCourse.findById(courseDetail.UniversityCourseID);
+            let updatedCollegeList = universityCourseDetail.collegeList.filter(item=>item!=courseDetail.CollegeID);
             await UniversityCourse.update(
-                { _id: { $in: [request.UniversityID] } },
-                { $set: { collegeList: UniversityCourseCollegeList } },
+                { _id: { $in: [courseDetail.UniversityCourseID] } },
+                { $set: { collegeList: updatedCollegeList} },
                 { multi: true }
             );
             const course = await CollegeCourse.findByIdAndRemove(id);
             if (!course) {
-                return res.status(404).send({ message: "Course not found" })
+                return res.status(404).send({ message: "Course not found" });
             }
-            return res.status(200).send({ status_code: 200, id: id, message: "Course deleted successfully." })
+            return res.status(200).send({ status_code: 200, id: id, message: "College Course deleted successfully." });
         } catch (err) {
             console.log(err);
             return res.status(400).send(err)
