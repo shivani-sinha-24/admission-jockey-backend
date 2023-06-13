@@ -10,8 +10,8 @@ export default {
     //College Category create
     async createCategory(req, res) {
         let request = req.body;
-        request.image = 'images/' + req?.files['image'][0]?.filename;
-        request.logo = 'images/' + req?.files['logo'][0]?.filename;
+        let image = req.files && req?.files['image']?req?.files['image'][0]:null;
+        let logo = req.files && req?.files['logo']?req?.files['logo'][0]:null;
         let exist = await Category.findOne({ "name": request.name });
         if (exist) {
             return res.status(200).send({ message: 'This name is already exists!' });
@@ -25,6 +25,16 @@ export default {
                 request.parentCount = 0;
                 request.branch = [];
             }
+
+            if(image&&logo){
+                request.image = req?.files['image'][0]?.filename;
+                request.logo = req?.files['logo'][0]?.filename;
+            }else if(image&&!logo){
+                request.image = req?.files['image'][0]?.filename;
+            }else if(logo&&!image){
+                request.logo = req?.files['logo'][0]?.filename;
+            }
+
             let category = await Category.create(request);
             return res.status(200).send({ status_code: 200, category: category, message: "Category created successfully." });
         } catch (err) {
@@ -49,16 +59,16 @@ export default {
     async updateCategory(req, res) {
         try {
             let request = req.body;
-            if (req?.files['image'][0]?.filename && req?.files['logo'] == undefined) {
-                request.image = 'images/' + req?.files['image'][0]?.filename;
-            }
-            if (req?.files['logo'][0]?.filename && req?.files['image'] == undefined) {
-                request.logo = 'images/' + req?.files['logo'][0]?.filename;
-            }
-            if (req?.files['image'][0]?.filename && req?.files['logo'][0]?.filename) {
-                request.image = 'images/' + req?.files['image'][0]?.filename;
-                request.logo = 'images/' + req?.files['logo'][0]?.filename;
-            }
+            // if (req?.files['image'][0]?.filename && req?.files['logo'] == undefined) {
+            //     request.image = 'images/' + req?.files['image'][0]?.filename;
+            // }
+            // if (req?.files['logo'][0]?.filename && req?.files['image'] == undefined) {
+            //     request.logo = 'images/' + req?.files['logo'][0]?.filename;
+            // }
+            // if (req?.files['image'][0]?.filename && req?.files['logo'][0]?.filename) {
+            //     request.image = 'images/' + req?.files['image'][0]?.filename;
+            //     request.logo = 'images/' + req?.files['logo'][0]?.filename;
+            // }
             if (!request) {
                 return res.status(400).send({ message: "All Input Field Is Required" });
             }
@@ -67,7 +77,19 @@ export default {
             if (!category) {
                 return res.status(404).send({ message: "Category Not Found !!" })
             }
-            await Category.findByIdAndUpdate(_id, request)
+
+            let image = req.files && req?.files['image']?req?.files['image'][0]:null;
+            let logo = req.files && req?.files['logo']?req?.files['logo'][0]:null;
+            if(image&&logo){
+                request.image = req?.files['image'][0]?.filename;
+                request.logo = req?.files['logo'][0]?.filename;
+            }else if(image&&!logo){
+                request.image = req?.files['image'][0]?.filename;
+            }else if(logo&&!image){
+                request.logo = req?.files['logo'][0]?.filename;
+            }
+
+            await Category.findByIdAndUpdate(_id, request,{new: true})
             return res.status(200).send({ status_code: 200, category: request, message: "Category updated successfully." })
 
         } catch (err) {

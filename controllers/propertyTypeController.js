@@ -220,6 +220,10 @@ export default {
 
         let request = req.body;
         //console.log(request);
+        let image = req.file&&req.file.filename;  
+        if(image){
+            request.image = 'images/'+image;
+        }
 
         if (request.team_lead_img?.includes("public")) {
             request.team_lead_img = request.team_lead_img
@@ -242,7 +246,7 @@ export default {
                 {
                     $set: {
                         name: request.name,
-                        team_lead_img: request.team_lead_img,
+                        image: request.image,
                         designation: request.designation
                     },
                 },
