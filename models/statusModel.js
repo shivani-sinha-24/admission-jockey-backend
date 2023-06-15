@@ -14,6 +14,9 @@ const statusSchema = new mongoose.Schema({
     status_for: {
         type: String,       
     },
+    created_by_user_id:{
+        type: String
+    }
   
 },
 

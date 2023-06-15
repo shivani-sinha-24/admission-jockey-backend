@@ -302,7 +302,14 @@ Router.post("/createGallery", Authentication, upload.fields([
 //GET GALLERY
 Router.get("/getGallery", Authentication, PropertyTypeController.getGallery);
 
-
+// DELETE GALLERY IMAGE
+Router.put(`/delete-gallery-image`, Authentication, PropertyTypeController.deleteGalleryImg)
+Router.put(`/replace-gallery-image`, Authentication, upload.single('gallery_img'), PropertyTypeController.replaceGalleryImg)
+Router.put('/edit-gallery-image', Authentication, upload.fields([
+   {
+      name: 'gallery_img', maxCount: 8
+   }
+]), PropertyTypeController.editGalleryImage)
 
 
 
