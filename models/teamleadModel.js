@@ -15,6 +15,10 @@ const teamleadModel = new mongoose.Schema({
     property_id:{
         type: String
     },
+    created_by_user_id:{
+        type: String
+    }
+
 },
 
 { timestamps: {createdAt: 'created_at',updatedAt: 'updated_at'} }

@@ -111,6 +111,9 @@ const collegeSchema = new mongoose.Schema({
     //     type: String,
     //     default: "1", // 1=Active, 0=inactive
     // },
+    created_by_user_id:{
+        type: String
+    }
 },
 
     { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }

@@ -183,6 +183,88 @@ export default {
         }
     },
 
+
+    //DELETE GALLERY IMAGE
+    async   deleteGalleryImg(req,res){
+        try{
+            const {id,image} = req.body;
+            const exist = Gallery.findById(id)
+            if(exist){
+                console.log("gallery document found");
+                const udatedGallery = await Gallery.updateOne({_id:id},{
+                    $pull: {
+                        gallery_img: image,
+                    },
+                })
+                
+                const gallery = await Gallery.find({})
+                return res.status(200).send({ status_code: 200, "gallery": gallery, message: "Image deleted successfully." });
+            }
+        }catch(error){
+            return res.status(400).send({ message: "Something Went Wrong!" })
+        }
+    },
+
+    async replaceGalleryImg(req,res){
+        try {
+            const {id,image,index} = req.body;
+            const gallery_img = 'images/' +req.file.filename;
+            const exist = await Gallery.findOne({_id:id})
+            if(exist){
+                const exist_gallery_img = exist.gallery_img
+                exist_gallery_img.splice(index,1,gallery_img)
+                const updatedGallery = await Gallery.findByIdAndUpdate({_id:id},{
+                    "$set": { 
+                        "gallery_img": exist_gallery_img},
+                },
+                {new:true}
+                )
+                return res.status(200).send({ status_code: 200, "gallery": updatedGallery, message: "Image updated successfully." });
+            }
+        } catch (error) {
+            return res.status(400).send({ message: "Something Went Wrong!" })
+        }
+    },
+
+    async editGalleryImage(req,res) {
+        try {
+            const {id,property_id,title}= req.body;
+            let gallery_img = [];
+            let exist_gallery_img;
+
+            if (req?.files != undefined && req?.files?.gallery_img?.length > 0) {
+                for (let i = 0; i < req?.files?.gallery_img?.length; i++) {
+                    gallery_img?.push('images/' + req?.files?.gallery_img[i]?.filename)
+                }
+                // request.gallery_img = gallery_img;
+            }
+
+            const exist = await Gallery.findOne({_id:id})
+            if(exist){
+                exist_gallery_img = exist.gallery_img
+                if(gallery_img.length>0){
+                    exist_gallery_img = exist_gallery_img.concat(gallery_img)
+                }
+                const updatedGallery = await Gallery.findByIdAndUpdate({_id:id},{
+                    "$set": { 
+                        "title": title,
+                        "gallery_img": exist_gallery_img
+                    },
+                },
+                {new:true}
+                )
+                return res.status(200).send({ status_code: 200, "gallery": updatedGallery, message: "Gallery updated successfully." });
+            }
+            console.log(gallery_img);
+            console.log(exist_gallery_img);
+            
+        } catch (error) {
+            return res.status(400).send({ message: "Something Went Wrong!" })
+            
+        }
+    },
+    
+
     // GET Team lead 
     async getTeamLead(req, res) {
 
