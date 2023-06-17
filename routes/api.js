@@ -477,7 +477,6 @@ Router.put("/updateUniversityCourse", Authentication, PropertyTypeController.upd
 //CREATE-COLLEGE_COURSE
 Router.post("/createCollegeCourse", Authentication, PropertyTypeController.createCollegeCourse);
 
-
 //GET-COLLEGE_COURSE
 Router.get("/getCollegeCourse", Authentication, PropertyTypeController.getCollegeCourse);
 
@@ -486,7 +485,6 @@ Router.put("/updateCollegeCourse", Authentication, PropertyTypeController.update
 
 //DELETE-UNIVERSITY_COURSE
 Router.delete("/deleteCollegeCourse", Authentication, PropertyTypeController.deleteCollegeCourse);
-
 
 
 //Team Leader
@@ -500,6 +498,9 @@ Router.delete("/deleteTeamLead", Authentication, UserController.deleteUserTeamLe
 
 //Team Leader update
 Router.post("/updateTeamLead", Authentication, UserController.updateTeamLead);
+
+//Team Leader update
+Router.put("/sendOtpForClaim", Authentication, UserController.sendOtpForClaim);
 
 
 export default Router;

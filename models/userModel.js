@@ -72,7 +72,6 @@ const userSchema = new mongoose.Schema({
     permissions:{
         type:Object
     }
-
 },
 
     { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }

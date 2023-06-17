@@ -21,7 +21,9 @@ const propertySchema = new mongoose.Schema({
         type: String,
         default: "1", // 1=Active, 0=inactive
     },
-    
+    propertyClaimOtp:{
+        type:String
+    }    
 },
 
 { timestamps: {createdAt: 'created_at',updatedAt: 'updated_at'} }

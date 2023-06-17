@@ -48,30 +48,15 @@ const collegeSchema = new mongoose.Schema({
     affilite_by: {
         type: Array
     },
-    // approve_by: [{
-    //     value: {
-    //         type: String,
-    //         allowNull: false
-    //     },
-    //     label: {
-    //         type: String,
-    //         allowNull: false
-    //     }
-
-    // }],
-    // affilite_by: [{
-    //     value: {
-    //         type: String,
-    //         allowNull: false
-    //     },
-    //     label: {
-    //         type: String,
-    //         allowNull: false
-    //     }
-    // }],
-    image:{
+    image: {
         type: String,
         allowNull: false
+    },
+    propertymanagerId: {
+        type: String,
+    },
+    propertyClaimOtp:{
+        type:String
     },
     // featured_img:[{
     //     type: String,
@@ -111,7 +96,7 @@ const collegeSchema = new mongoose.Schema({
     //     type: String,
     //     default: "1", // 1=Active, 0=inactive
     // },
-    created_by_user_id:{
+    created_by_user_id: {
         type: String
     }
 },

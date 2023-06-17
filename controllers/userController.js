@@ -48,7 +48,6 @@ export default {
             email: 'required|email',
             contact_no: 'required',
             password: 'required_if:role,0|min:8|same:confirm_password',
-
         });
 
         if (validation.fails()) {
@@ -984,6 +983,28 @@ export default {
         }
 
     },
+
+    async sendOtpForClaim(req, res) {
+        try {
+            let request = req.body;
+            var val = Math.floor(1000 + Math.random() * 9000);
+            const college = await College.findById(request.property_id);
+            if (!college) {
+                return res.status(404).send({ message: "College Not Found !!" })
+            }
+            await College.update(
+                { _id: request.property_id },
+                { $set: { propertyClaimOtp: val } }
+            );
+            Mail.send(college.email, "" + `This is your OTP for Property Claim "${val}"`);
+        } catch (err) {
+            console.log(err);
+            return res.status(400).send(err)
+        }
+
+    },
+
+
 
 }
 
