@@ -997,6 +997,30 @@ export default {
                 { $set: { propertyClaimOtp: val } }
             );
             Mail.send(college.email, "" + `This is your OTP for Property Claim "${val}"`);
+            return res.status(200).send({ status_code: 200, data: request, message: "Check your property email for the OTP." });
+        } catch (err) {
+            console.log(err);
+            return res.status(400).send(err)
+        }
+
+    },
+
+    async checkOtpForClaim(req, res) {
+        try {
+            let request = req.body;
+            console.log(request);
+            const college = await College.findById(request.property_id);
+            if (!college) {
+                return res.status(404).send({ message: "College Not Found !!" })
+            }
+            if (college.propertyClaimOtp !== request.propertyClaimOtp) {
+                return res.status(404).send({ status_code: 404, message: "Wrong OTP" })
+            }
+            await College.update(
+                { _id: request.property_id },
+                { $set: { propertyClaimOtp: "", propertyManagerId: request.user_id, isClaimed: true } }
+            );
+            return res.status(200).send({ status_code: 200, message: "Property is Claimed by you!" });
         } catch (err) {
             console.log(err);
             return res.status(400).send(err)

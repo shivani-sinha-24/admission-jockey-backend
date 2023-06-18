@@ -52,11 +52,14 @@ const collegeSchema = new mongoose.Schema({
         type: String,
         allowNull: false
     },
-    propertymanagerId: {
+    propertyManagerId: {
         type: String,
     },
-    propertyClaimOtp:{
-        type:String
+    propertyClaimOtp: {
+        type: String
+    },
+    isClaimed: {
+        type: Boolean
     },
     // featured_img:[{
     //     type: String,

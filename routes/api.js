@@ -499,8 +499,11 @@ Router.delete("/deleteTeamLead", Authentication, UserController.deleteUserTeamLe
 //Team Leader update
 Router.post("/updateTeamLead", Authentication, UserController.updateTeamLead);
 
-//Team Leader update
+//Send Otp For Property Claim
 Router.put("/sendOtpForClaim", Authentication, UserController.sendOtpForClaim);
+
+//Check Otp For Property Claim
+Router.put("/checkOtpForClaim", Authentication, UserController.checkOtpForClaim);
 
 
 export default Router;
