@@ -954,7 +954,7 @@ export default {
                 { multi: true }
             );
             await Teamleader.findByIdAndUpdate(_id, request);
-            return res.status(200).send({ status_code: 200, category: request, message: "Category updated successfully." })
+            return res.status(200).send({ status_code: 200, teamLeader: request, message: "Team Leader updated successfully." })
 
         } catch (err) {
             console.log(err);
