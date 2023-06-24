@@ -396,6 +396,10 @@ Router.put("/updateAdmission_process", PropertyTypeController.updateAdmission_pr
 Router.get("/getAdmission_process", Authentication, PropertyTypeController.getAdmission_process);
 
 
+//HOSTEL ROUTES
+Router.get("/get-hostel", Authentication, PropertyTypeController.getHostel);
+Router.post("/create-hostel", Authentication, PropertyTypeController.createHostel);
+Router.put("/update-hostel",Authentication, PropertyTypeController.updateHostel);
 
 
 {/**announcement-router */ }
