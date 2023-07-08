@@ -494,7 +494,8 @@ export default {
     },
 
     async getUserById(req, res) {
-        let user = await User.findById(req.user._id);
+        // let user = await User.findById(req.user._id);
+        let user = await User.findById(req.body.id);
         return res.status(200).send({ user })
 
     },
