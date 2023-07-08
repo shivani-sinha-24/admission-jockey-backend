@@ -15,6 +15,7 @@ import Qas from "../models/QA.js";
 // import Other from "../models/OthersModal.js";
 // import Other from "../models/OtherModel.js";
 import OthersModal from "../models/otherModel.js";
+import Hostel from "../models/hostelModel.js";
 
 
 export default {
@@ -185,23 +186,38 @@ export default {
 
     //DELETE GALLERY IMAGE
     async   deleteGalleryImg(req,res){
-        try{
-            const {id,image} = req.body;
-            const exist = Gallery.findById(id)
-            if(exist){
-                console.log("gallery document found");
-                const udatedGallery = await Gallery.updateOne({_id:id},{
-                    $pull: {
-                        gallery_img: image,
-                    },
-                })
+        // try{
+        //     const {id,image} = req.body;
+        //     const exist = Gallery.findById(id)
+        //     if(exist){
+        //         console.log("gallery document found");
+        //         const udatedGallery = await Gallery.updateOne({_id:id},{
+        //             $pull: {
+        //                 gallery_img: image,
+        //             },
+        //         })
                 
-                const gallery = await Gallery.find({})
-                return res.status(200).send({ status_code: 200, "gallery": gallery, message: "Image deleted successfully." });
-            }
+        //         const gallery = await Gallery.find({})
+        //         return res.status(200).send({ status_code: 200, "gallery": gallery, message: "Image deleted successfully." });
+        //     }
+        // }catch(error){
+        //     return res.status(400).send({ message: "Something Went Wrong!" })
+        // }
+        // console.log(req.body);
+
+        try {
+            const galleryImgToDelete = req?.body;
+            const deleteImages = galleryImgToDelete.map(({image, id, index}) => (
+                Gallery.findOneAndUpdate({ _id:id }, {'$pull': {  gallery_img: image, } })
+            )) 
+            Promise.all(deleteImages)
+            .then(console.log('deleted successful'))
+            .catch(console.error('err in delete img'))
+            const gallery = await Gallery.find({})
+            return res.status(200).send({ status_code: 200, "gallery": gallery, message: "Image deleted successfully." });
         }catch(error){
             return res.status(400).send({ message: "Something Went Wrong!" })
-        }
+        }    
     },
 
     async replaceGalleryImg(req,res){
@@ -225,9 +241,9 @@ export default {
         }
     },
 
-    async editGalleryImage(req,res) {
+    async editGalleryImage(req,res) {       
         try {
-            const {id,property_id,title}= req.body;
+            const {id,property_id,title,galleryImgToDelete}= req.body;
             let gallery_img = [];
             let exist_gallery_img;
 
@@ -254,8 +270,6 @@ export default {
                 )
                 return res.status(200).send({ status_code: 200, "gallery": updatedGallery, message: "Gallery updated successfully." });
             }
-            console.log(gallery_img);
-            console.log(exist_gallery_img);
             
         } catch (error) {
             return res.status(400).send({ message: "Something Went Wrong!" })
@@ -359,7 +373,7 @@ export default {
 
         let request = req.body;
         //  console.log(req.body, "files gallery")
-        console.log(req.file, "please")
+        // console.log(req.file, "please")
         // request.logo = req?.files == undefined ? null : req?.files?.logo != undefined && 'public/uploads/' + req?.files?.logo[0]?.filename;
         request.placement_img = req?.file == undefined ? null : 'public/uploads/' + req?.file?.filename;
 
@@ -439,7 +453,7 @@ export default {
 
         let request = req.body;
         //  console.log(req.body, "files gallery")
-        console.log(req.file, "please")
+        // console.log(req.file, "please")
         // request.logo = req?.files == undefined ? null : req?.files?.logo != undefined && 'public/uploads/' + req?.files?.logo[0]?.filename;
         request.loan_img = req?.file == undefined ? null : 'public/uploads/' + req?.file?.filename;
 
@@ -815,19 +829,19 @@ export default {
     async createOther(req, res) {
 
         let request = req.body;
-        console.log(request);
+        // console.log(request);
 
         try {
 
             let exist = await OthersModal.findOne({ "property_id": request.property_id });
-            console.log("exist", exist);
+            // console.log("exist", exist);
 
             if (exist) {
                 return res.status(200).send({ message: 'This section is already exists!' });
             }
 
             let other = await OthersModal.create(request);
-            console.log("others", other);
+            // console.log("others", other);
 
             let others = await OthersModal.find({})
 
@@ -865,7 +879,7 @@ export default {
 
         let request = req.body;
 
-        console.log(request);
+        // console.log(request);
 
         try {
 
@@ -891,7 +905,7 @@ export default {
             );
 
             if (other) {
-                console.log("other updated: ", other);
+                // console.log("other updated: ", other);
                 const others = await OthersModal.find({})
                 return res.status(200).send({ status_code: 200, others, message: "Other updated successfully." });
             }
@@ -1108,7 +1122,60 @@ export default {
             });
         });
         return res.status(200).send({ status_code: 200, data: filterlist, message: "Course deleted successfully." })
-    }
+    },
+
+    // GET Hostel
+    async getHostel(req, res) {
+        try {
+            let hostel = await Hostel.find({})
+            console.log(hostel);
+            return res.status(200).json(hostel);
+        } catch (error) {
+            res.status(400).send(error)
+        }
+    },
+
+
+    //ADD Hostel
+    async createHostel(req,res){
+        const request = req.body;
+        try {
+            try {
+                let hostel = await Hostel.create(request);
+                let hostel_list = await Hostel.find();
+                return res.status(200).send({ status_code: 200, hostel: hostel_list, message: "Hostel created successfully." });
+            } catch (err) {
+                return res.status(400).send({ message: "Something Went Wrong!" })
+            }
+        } catch (error) {
+            res.status(400).send(error)
+            
+        }
+    },
+
+
+    //UPDATE Hostel
+    async updateHostel(req,res){
+        let request = req.body;
+        try {
+            var hostel = await Hostel.findOneAndUpdate(
+                { _id: req.body.id },
+                {
+                    $set: {
+                        title: request.title,
+                        fees:request.fees,
+                        description: request.description
+                    },
+                },
+                { new: true }
+            );
+            return res.status(200).send({ status_code: 200, "hostel": hostel, message: "hostel updated successfully." });
+
+        } catch (err) {
+            return res.status(400).send({ message: "Something Went Wrong!" })
+
+        }
+    },
 
 }
 
