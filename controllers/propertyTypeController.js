@@ -154,7 +154,6 @@ export default {
                 }
 
                 let gallery = await Gallery.create(request);
-                // console.log(gallery);
 
                 return res.status(200).send({ status_code: 200, gallery: gallery, message: "Gallery created successfully." });
 

@@ -65,17 +65,23 @@ export default {
                 let random_password = createPassword()
                 let hash_password = bcrypt.hashSync(random_password);
                 Mail.send(user_email, "" + `This is your password "${random_password}"`);
-
                 if ((exist && exist.is_deleted == true) || !exist) {
                     request.password = hash_password
-                    let updated = await User.create(request);
-                    return res.json(reply.success("User Created Successfully!!", updated));
+                    let user = await User.create(request);
+                    var token_id = makeid();
+                    let token = jwt.sign({ "user_id": user._id, "tid": token_id }, process.env.SECRET_KEY, { expiresIn: "24h" });
+                    await Token.create({ token_id, user_id: user._id });
+                    const { password, ...responseUser } = user._doc
+                    return res.json(reply.success("User Created Successfully!!", { responseUser, token: token }));
                 }
             }
             request.password = bcrypt.hashSync(request.password);
             const user = await User.create(request)
-            return res.json(reply.success("User Created Successfully!!", user));
-
+            var token_id = makeid();
+            let token = jwt.sign({ "user_id": user._id, "tid": token_id }, process.env.SECRET_KEY, { expiresIn: "24h" });
+            await Token.create({ token_id, user_id: user._id });
+            const { password, ...responseUser } = user._doc
+            return res.json(reply.success("User Created Successfully!!", { responseUser, token: token }));
         } catch (err) {
             console.log("err", err)
             return res.json(reply.failed("Something Went Wrong!"))
@@ -125,8 +131,8 @@ export default {
 
             await Token.create({ token_id, user_id: user._id });
             const { password, ...responseUser } = user._doc
+            console.log(token, responseUser);
             return res.json(reply.success("Login Successfully!!", { responseUser, token: token }))
-
         } catch (err) {
             console.log("err", err)
             return res.json(reply.failed("Something Went Wrong!"))
