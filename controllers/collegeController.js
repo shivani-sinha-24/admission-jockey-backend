@@ -12,11 +12,8 @@ export default {
     // College Create:
     async collegeCreate(req, res) {
         let request = req.body;
-        // request.logo = req?.files == undefined ? null : req?.files?.logo != undefined && 'images/' + req?.files?.logo[0]?.filename;
-        request.image = req?.file == undefined ? null : 'images/' + req?.file?.filename;
-        // request.featured_img = req?.files == undefined ? null : req?.files?.featured_img != undefined && 'public/uploads/' + req?.files?.featured_img[0]?.filename;
-        // request.approve_by = JSON.parse(request.approve_by);
-        // request.affilite_by = JSON.parse(request.affilite_by);
+        request.image = `images/${req?.files['image'][0]?.filename}`;
+        request.logo = `images/${req?.files['logo'][0]?.filename}`;
         let exist = await College.findOne({ "email": request.email });
         if (exist) {
             return res.status(200).send({ message: 'This email and contact number is already exists!' });
@@ -110,13 +107,13 @@ export default {
                         est_year: request.est_year,
                         approved_by: request.approve_by,
                         affliated_by: request.affilite_by,
-                        college_type:"Gov"
+                        college_type: "Gov"
 
                     },
                 },
                 { new: true }
             );
-            console.log(college,"kartikcollege");
+            console.log(college, "kartikcollege");
             return res.status(200).send({ status_code: 200, "college": college, message: "College updated successfully." });
         } catch (err) {
             console.log(err);
@@ -169,5 +166,145 @@ export default {
     //     }
     // },
 
+    // Get Colleges
+    async universityWebList(req, res) {
+        try {
+            let colleges = await College.find({ edu_type: "University" });
+            let firstRow = [];
+            let secondRow = [];
+            let thirdRow = [];
+            if (colleges.length <= 3) {
+                firstRow = colleges;
+            }
+            if (colleges.length > 3 && colleges.length <= 6) {
+                let valuesArr1 = colleges;
+                var removeValFrom = [0, 1, 2];
+                valuesArr1 = valuesArr1.filter(function (value, index) {
+                    return removeValFrom.indexOf(index) == -1;
+                });
+                firstRow = [colleges[0], colleges[1], colleges[2]];
+                secondRow = valuesArr1;
+            }
+            if (colleges.length > 6 && colleges.length <= 9) {
+                let valuesArr2 = colleges;
+                var removeValFrom = [3, 4, 5];
+                valuesArr2 = valuesArr2.filter(function (value, index) {
+                    return removeValFrom.indexOf(index) == -1;
+                });
+                firstRow = [colleges[0], colleges[1], colleges[2]];
+                secondRow = [colleges[3], colleges[4], colleges[5]];
+                thirdRow = valuesArr2;
+            }
+            return res.status(200).json({ firstRowUni: firstRow, secondRowUni: secondRow, thirdRowUni: thirdRow })
+        } catch (err) {
+            console.log(err, "error");
+            return res.status(400).send({ message: "Unable to fetch colleges datails!" })
+        }
+    },
+
+    async universityLogoList(req, res) {
+        try {
+            let colleges = await College.find({ edu_type: "University" });
+            let firstRow = [];
+            let secondRow = [];
+            let thirdRow = [];
+            if (colleges.length <= 4) {
+                firstRow = colleges;
+            }
+            if (colleges.length > 4 && colleges.length <= 8) {
+                let valuesArr1 = colleges;
+                var removeValFrom = [0, 1, 2, 3];
+                valuesArr1 = valuesArr1.filter(function (value, index) {
+                    return removeValFrom.indexOf(index) == -1;
+                });
+                firstRow = [colleges[0], colleges[1], colleges[2], colleges[3]];
+                secondRow = valuesArr1;
+            }
+            if (colleges.length > 8 && colleges.length <= 12) {
+                let valuesArr2 = colleges;
+                var removeValFrom = [4, 5, 6, 7];
+                valuesArr2 = valuesArr2.filter(function (value, index) {
+                    return removeValFrom.indexOf(index) == -1;
+                });
+                firstRow = [colleges[0], colleges[1], colleges[2], colleges[3]];
+                secondRow = [colleges[4], colleges[5], colleges[6], colleges[7]];
+                thirdRow = valuesArr2;
+            }
+            return res.status(200).json({ firstRowUni: firstRow, secondRowUni: secondRow, thirdRowUni: thirdRow })
+        } catch (err) {
+            console.log(err, "error");
+            return res.status(400).send({ message: "Unable to fetch colleges datails!" })
+        }
+    },
+
+    async collegeWebList(req, res) {
+        try {
+            let colleges = await College.find({ edu_type: "College" });
+            let firstRow = [];
+            let secondRow = [];
+            let thirdRow = [];
+            if (colleges.length <= 3) {
+                firstRow = colleges;
+            }
+            if (colleges.length > 3 && colleges.length <= 6) {
+                let valuesArr1 = colleges;
+                var removeValFrom = [0, 1, 2];
+                valuesArr1 = valuesArr1.filter(function (value, index) {
+                    return removeValFrom.indexOf(index) == -1;
+                });
+                firstRow = [colleges[0], colleges[1], colleges[2]];
+                secondRow = valuesArr1;
+            }
+            if (colleges.length > 6 && colleges.length <= 9) {
+                let valuesArr2 = colleges;
+                var removeValFrom = [3, 4, 5];
+                valuesArr2 = valuesArr2.filter(function (value, index) {
+                    return removeValFrom.indexOf(index) == -1;
+                });
+                firstRow = [colleges[0], colleges[1], colleges[2]];
+                secondRow = [colleges[3], colleges[4], colleges[5]];
+                thirdRow = valuesArr2;
+            }
+            return res.status(200).json({ firstRowUni: firstRow, secondRowUni: secondRow, thirdRowUni: thirdRow })
+        } catch (err) {
+            console.log(err, "error");
+            return res.status(400).send({ message: "Unable to fetch colleges datails!" })
+        }
+    },
+
+    async collegeLogoList(req, res) {
+        try {
+            let colleges = await College.find({ edu_type: "College" });
+            let firstRow = [];
+            let secondRow = [];
+            let thirdRow = [];
+            if (colleges.length <= 4) {
+                firstRow = colleges;
+            }
+            if (colleges.length > 4 && colleges.length <= 8) {
+                let valuesArr1 = colleges;
+                var removeValFrom = [0, 1, 2, 3];
+                valuesArr1 = valuesArr1.filter(function (value, index) {
+                    return removeValFrom.indexOf(index) == -1;
+                });
+                firstRow = [colleges[0], colleges[1], colleges[2], colleges[3]];
+                secondRow = valuesArr1;
+            }
+            if (colleges.length > 8 && colleges.length <= 12) {
+                let valuesArr2 = colleges;
+                var removeValFrom = [4, 5, 6, 7];
+                valuesArr2 = valuesArr2.filter(function (value, index) {
+                    return removeValFrom.indexOf(index) == -1;
+                });
+                firstRow = [colleges[0], colleges[1], colleges[2], colleges[3]];
+                secondRow = [colleges[4], colleges[5], colleges[6], colleges[7]];
+                thirdRow = valuesArr2;
+            }
+            return res.status(200).json({ firstRowUni: firstRow, secondRowUni: secondRow, thirdRowUni: thirdRow })
+        } catch (err) {
+            console.log(err, "error");
+            return res.status(400).send({ message: "Unable to fetch colleges datails!" })
+        }
+    },
 
 }
