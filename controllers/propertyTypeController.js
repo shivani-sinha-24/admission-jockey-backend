@@ -996,16 +996,15 @@ export default {
 
 
     async createCollegeCourse(req, res) {
-
         let request = req.body;
         try {
             const UniversityCourseList = await UniversityCourse.findById(request.UniversityID);
             if (!UniversityCourseList) {
                 return res.status(404).send({ message: "Course Not Found !!" });
             }
-            UniversityCourseList?.collegeList.map((universityCourseCheck) => {
-                if (universityCourseCheck == CollegeID) {
-                    return res.status(404).send({ message: "Course Already Exist" });
+            UniversityCourseList?.collegeList?.map((universityCourseCheck) => {
+                if (universityCourseCheck == request.CollegeID) {
+                    return res.status(200).send({ message: "Course Already Exist" });
                 }
             });
             let UniversityCourseCollegeList = [...UniversityCourseList?.collegeList, request.CollegeID];
@@ -1015,7 +1014,6 @@ export default {
                 { multi: true }
             );
             let collegeCourse = await CollegeCourse.create(request);
-
             return res.status(200).send({ status_code: 200, collegeCourse: collegeCourse, message: "College course created successfully." });
 
         } catch (err) {

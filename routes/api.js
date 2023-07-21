@@ -4,7 +4,9 @@ import Authentication from "../middleware/auth.js";
 import roleAuth from "../middleware/roleAuth.js";
 import clgController from "../controllers/collegeController.js";
 import categoryController from "../controllers/categoryController.js";
+import seoController from "../controllers/seoController.js";
 import statusController from "../controllers/statusController.js";
+import WebController from "../controllers/websiteController.js";
 import multer from 'multer';
 import bodyParser from 'body-parser';
 import PropertyTypeController from "../controllers/propertyTypeController.js";
@@ -166,28 +168,17 @@ Router.post("/addUserPermission", Authentication, UserController.updateUserPermi
 // College APIs
 Router.get('/profile_detail', Authentication, UserController.profile_detail);
 
-//COLLEGE CREATE.
-Router.post("/collegeCreate", upload.single('image'), Authentication, clgController.collegeCreate);
 
-// Router.post("/collegeCreate", Authentication, upload.fields([
-//    {
-//       name: 'logo', maxCount: 1
-//    }, {
-//       name: 'featured_img', maxCount: 2
-//    },
-//    {
-//       name: 'broucher', maxCount: 1
-//    },
-//    {
-//       name: 'podcast_hindi', maxCount: 1
-//    },
-//    {
-//       name: 'podcast_eng', maxCount: 1
-//    },
-// ]),
-//    clgController.collegeCreate); 
+const cpUpload = upload.fields([{ name: 'image', maxCount: 1 }, { name: 'logo', maxCount: 1 }])
+Router.post("/collegeCreate", cpUpload, Authentication, clgController.collegeCreate);
+
 //COLLEGE GET
 Router.get("/getCollegeList", Authentication, clgController.getCollege);
+Router.get("/getWebCollegeList", clgController.getCollege);
+Router.get("/universityRows", clgController.universityWebList);
+Router.get("/universityLogoRows", clgController.universityLogoList);
+Router.get("/collegeRows", clgController.collegeWebList);
+Router.get("/collegeLogoRows", clgController.collegeLogoList);
 
 //COLLEGE UPDATE
 // Router.put("/updateCollege", Authentication, upload.single('image'), clgController.updateCollege);
@@ -204,21 +195,7 @@ Router.get("/getCollegeAffliateApprove", Authentication, clgController.getColleg
 
 {/**create category Api */ }
 
-//COLLEGE Category POST
-//Router.post("/createCollegeCategory", Authentication, categoryController.createCollegeCategory); 
-
-
-//COLLEGE CREATE
-// Router.post("/createCategory", upload.fields([
-//    {
-//       name: 'image', maxCount: 1
-//    },
-//    {
-//       name: 'logo', maxCount: 1
-//    }
-// ]),
 //    categoryController.createCategory);
-const cpUpload = upload.fields([{ name: 'image', maxCount: 1 }, { name: 'logo', maxCount: 1 }])
 Router.post("/createCategory", cpUpload, categoryController.createCategory);
 
 //COLLEGE GET Category
@@ -399,7 +376,7 @@ Router.get("/getAdmission_process", Authentication, PropertyTypeController.getAd
 //HOSTEL ROUTES
 Router.get("/get-hostel", Authentication, PropertyTypeController.getHostel);
 Router.post("/create-hostel", Authentication, PropertyTypeController.createHostel);
-Router.put("/update-hostel",Authentication, PropertyTypeController.updateHostel);
+Router.put("/update-hostel", Authentication, PropertyTypeController.updateHostel);
 
 
 {/**announcement-router */ }
@@ -508,6 +485,23 @@ Router.put("/sendOtpForClaim", Authentication, UserController.sendOtpForClaim);
 
 //Check Otp For Property Claim
 Router.put("/checkOtpForClaim", Authentication, UserController.checkOtpForClaim);
+
+
+//Create SEO
+Router.post("/createSeo", Authentication, seoController.createSEO);
+
+//Get SEO
+Router.get("/getSeo", Authentication, seoController.getSEO);
+
+//Delete SEO
+Router.delete("/deleteSeo", Authentication, seoController.deleteSeo);
+
+//Seo update
+Router.put("/seoUpdate", Authentication, seoController.updateSeo);
+
+//Create WebCollege List
+Router.post("/createCollegeWebList", Authentication, WebController.createCollegeList);
+
 
 
 export default Router;
