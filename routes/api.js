@@ -502,6 +502,7 @@ Router.put("/seoUpdate", Authentication, seoController.updateSeo);
 //Create WebCollege List
 Router.post("/createCollegeWebList", Authentication, WebController.createCollegeList);
 
-
+// Create WebQuery List
+Router.post("/createWebQueryList", WebController.createQueryList);
 
 export default Router;
