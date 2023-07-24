@@ -41,13 +41,11 @@ export default {
             if (!request) {
                 return res.send("All input is required!");
             }
-
             let _id = req.query.id
             const status = await Status.findById(_id);
             if (!status) {
                 return res.status(400).send({ message: "Status not found" })
             }
-
             await Status.findByIdAndUpdate(_id, request)
             return res.status(200).send({ message: "Status updated successfully" })
 
