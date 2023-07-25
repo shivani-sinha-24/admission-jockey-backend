@@ -858,10 +858,13 @@ export default {
 
         try {
 
-            let exist = await UniversityCourse.findOne({ "name": request.name });
+            let exist = await UniversityCourse.findOne({ "universityID": request.universityID });
 
             if (exist) {
-                return res.status(200).send({ message: 'This name is already exists!' });
+                console.log(exist);
+                if(exist.name==request.name){
+                    return res.status(200).send({ message: 'This name is already exists!' });
+                }
             }
 
             let universityCourse = await UniversityCourse.create(request);

@@ -505,4 +505,9 @@ Router.post("/createCollegeWebList", Authentication, WebController.createCollege
 // Create WebQuery List
 Router.post("/createWebQueryList", WebController.createQueryList);
 
+//Get University Course for Websit
+Router.get("/getUniversityCourseWeb", WebController.getUniversityCourseWeb);
+Router.get("/getCollegesForSelectedCourse/:course", WebController.getCollegesForSelectedCourse);
+
+
 export default Router;
