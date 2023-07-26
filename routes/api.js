@@ -510,11 +510,11 @@ Router.get("/getCollegeWebList", Authentication, webController.getCollegeWebsite
 
 
 // Create WebQuery List
-Router.post("/createWebQueryList", WebController.createQueryList);
+Router.post("/createWebQueryList", webController.createQueryList);
 
 //Get University Course for Websit
-Router.get("/getUniversityCourseWeb", WebController.getUniversityCourseWeb);
-Router.get("/getCollegesForSelectedCourse/:course", WebController.getCollegesForSelectedCourse);
+Router.get("/getUniversityCourseWeb", webController.getUniversityCourseWeb);
+Router.get("/getCollegesForSelectedCourse/:course", webController.getCollegesForSelectedCourse);
 
 
 export default Router;
