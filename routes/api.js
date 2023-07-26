@@ -6,7 +6,7 @@ import clgController from "../controllers/collegeController.js";
 import categoryController from "../controllers/categoryController.js";
 import seoController from "../controllers/seoController.js";
 import statusController from "../controllers/statusController.js";
-import WebController from "../controllers/websiteController.js";
+import webController from "../controllers/websiteController.js";
 import multer from 'multer';
 import bodyParser from 'body-parser';
 import PropertyTypeController from "../controllers/propertyTypeController.js";
@@ -500,7 +500,14 @@ Router.delete("/deleteSeo", Authentication, seoController.deleteSeo);
 Router.put("/seoUpdate", Authentication, seoController.updateSeo);
 
 //Create WebCollege List
-Router.post("/createCollegeWebList", Authentication, WebController.createCollegeList);
+Router.post("/createWebCollegeList", Authentication, webController.createCollegeList);
+
+//Create WebUniversity List
+Router.post("/createWebUniversityList", Authentication, webController.createUniversityList);
+
+//Get Weblist
+Router.get("/getCollegeWebList", Authentication, webController.getCollegeWebsiteList);
+
 
 // Create WebQuery List
 Router.post("/createWebQueryList", WebController.createQueryList);

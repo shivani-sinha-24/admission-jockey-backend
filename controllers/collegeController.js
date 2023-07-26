@@ -113,7 +113,6 @@ export default {
                 },
                 { new: true }
             );
-            console.log(college, "kartikcollege");
             return res.status(200).send({ status_code: 200, "college": college, message: "College updated successfully." });
         } catch (err) {
             console.log(err);
