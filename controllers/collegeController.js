@@ -12,8 +12,8 @@ export default {
     // College Create:
     async collegeCreate(req, res) {
         let request = req.body;
-        request.image = `images/${req?.files['image'][0]?.filename}`;
-        request.logo = `images/${req?.files['logo'][0]?.filename}`;
+        request.image = `images/${req?.files?.['image'][0]?.filename}`;
+        request.logo = `images/${req?.files?.['logo'][0]?.filename}`;
         let exist = await College.findOne({ "email": request.email });
         if (exist) {
             return res.status(200).send({ message: 'This email and contact number is already exists!' });

@@ -14,7 +14,9 @@ export default {
         let logo = req.files && req?.files['logo']?req?.files['logo'][0]:null;
         let exist = await Category.findOne({ "name": request.name });
         if (exist) {
-            return res.status(200).send({ message: 'This name is already exists!' });
+            if(exist.created_by_user_id==req.body.created_by_user_id){
+                return res.status(200).send({ message: 'This name is already exists!' });
+            }
         }
         try {
             let parentExit = await Category.findOne({ "name": request.parent });
