@@ -60,10 +60,10 @@ export default {
     async createUniversityList(req, res) {
         try {
             let request = req.body;
-            let WebListArray = await WebList.find({});
+            let WebListArray = await webList.find({});
             if (WebListArray[0]?.universityList?.length > 0 || WebListArray[0]?.collegeList?.length > 0 || WebListArray[0]?.universityLogoList?.length > 0 || WebListArray[0]?.collegeLogoList?.length > 0) {
                 let FinalList = [...WebListArray[0]?.universityList, ...req?.body?.universityList];
-                await WebList.findOneAndUpdate(
+                await webList.findOneAndUpdate(
                     { _id: WebListArray[0]?._id },
                     {
                         $set: {
@@ -75,10 +75,10 @@ export default {
                     },
                     { new: true }
                 );
-                let WebListResult = await WebList.find();
+                let WebListResult = await webList.find();
                 return res.status(200).send({ status_code: 200, "WebListResult": WebListResult[0].universityList, message: "Universities added successfully." });
             } else {
-                let WebListResult = await WebList.create(request);
+                let WebListResult = await webList.create(request);
                 return res.status(200).send({ status_code: 200, "WebListResult": WebListResult, message: "Universities added successfully." });
             }
         } catch (error) {
@@ -90,7 +90,7 @@ export default {
     // Get Colleges Category
     async getCollegeWebsiteList(req, res) {
         try {
-            let WebListResult = await WebList.find();
+            let WebListResult = await webList.find();
             return res.status(200).send({ status_code: 200, "WebListResult": WebListResult, message: "College added successfully." });
         } catch (err) {
             console.log(err, "error");
