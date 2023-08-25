@@ -508,6 +508,8 @@ Router.post("/createWebQueryList", WebController.createQueryList);
 //Get University Course for Websit
 Router.get("/getUniversityCourseWeb", WebController.getUniversityCourseWeb);
 Router.get("/getCollegesForSelectedCourse/:course", WebController.getCollegesForSelectedCourse);
+Router.post("/get-college-courses/compare",WebController.getCourses)
+Router.post("/getWebCompareCollegeList", WebController.getWebCompareCollegeList);
 
 
 export default Router;
