@@ -7,6 +7,7 @@ import categoryController from "../controllers/categoryController.js";
 import seoController from "../controllers/seoController.js";
 import statusController from "../controllers/statusController.js";
 import webController from "../controllers/websiteController.js";
+import teamLeaderController from "../controllers/teamLeaderController.js";
 import multer from 'multer';
 import bodyParser from 'body-parser';
 import PropertyTypeController from "../controllers/propertyTypeController.js";
@@ -511,6 +512,8 @@ Router.get("/getCollegeWebList", Authentication, webController.getCollegeWebsite
 
 // Create WebQuery List
 Router.post("/createWebQueryList", webController.createQueryList);
+Router.get("/getQueryList", Authentication, webController.getQueryList);
+Router.get("/getMyTeamList", Authentication, teamLeaderController.getMyTeamList);
 
 //Get University Course for Websit
 Router.get("/getUniversityCourseWeb", webController.getUniversityCourseWeb);

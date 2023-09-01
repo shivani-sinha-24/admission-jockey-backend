@@ -18,6 +18,13 @@ export default {
         const query = await Query.create(request);
         res.status(200).send({query,message:"Query submitted"})
     },
+
+    async getQueryList(req,res){
+        let request = req?.body;
+        const query = await Query.find({isAssigned:true});
+        return res.status(200).json(query);
+    },
+
     async getUniversityCourseWeb(req, res) {
         try {
             let universityCourse = await Universitycourse.find({});
@@ -86,7 +93,6 @@ export default {
         }
     },
 
-
     // Get Colleges Category
     async getCollegeWebsiteList(req, res) {
         try {
@@ -94,7 +100,7 @@ export default {
             return res.status(200).send({ status_code: 200, "WebListResult": WebListResult, message: "College added successfully." });
         } catch (err) {
             console.log(err, "error");
-            return res.status(400).send({ message: "Unable to fetch seo datails!" })
+            return res.status(400).send({ message: "Unable to fetch seo datails!" });
         }
     },
 
