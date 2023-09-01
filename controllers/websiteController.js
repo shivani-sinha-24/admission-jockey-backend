@@ -104,4 +104,38 @@ export default {
         }
     },
 
+    async getCourses(req,res){
+        try {
+            const universities = (req?.body)
+            let uniIdArray = await Promise.all(universities?.map( async uni=>{
+                const university = await College.findOne({name:uni})
+                return(university?._id);
+            }))
+
+            let courses = await Promise.all(uniIdArray.map(async id =>{
+                const idString = id?.toString(); // Convert the object to a string
+                const course = await Universitycourse.find({universityID:idString})
+                return course
+            }))
+
+            res.status(200).send(courses);
+                
+        } catch (error) {
+            res.status(400).send(error)
+        }
+    },
+    
+    async getWebCompareCollegeList(req, res) {
+        try {
+            const idArray = req?.body;
+            let colleges = await Promise.all(idArray?.map(async id =>{
+                const college = await College.findOne({_id:id})
+                return college
+            }))
+                res?.status(200)?.send(colleges)
+        } catch (error) {
+            res.status(400).send(error)
+        }
+
+    },
 }

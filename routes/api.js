@@ -518,6 +518,7 @@ Router.get("/getMyTeamList", Authentication, teamLeaderController.getMyTeamList)
 //Get University Course for Websit
 Router.get("/getUniversityCourseWeb", webController.getUniversityCourseWeb);
 Router.get("/getCollegesForSelectedCourse/:course", webController.getCollegesForSelectedCourse);
-
+Router.post("/get-college-courses/compare",webController.getCourses)
+Router.post("/getWebCompareCollegeList", webController.getWebCompareCollegeList);
 
 export default Router;
