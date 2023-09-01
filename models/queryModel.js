@@ -1,20 +1,26 @@
 import mongoose from "mongoose";
 
 const querySchema = new mongoose.Schema({
-    name:{
-        type:String
+    name: {
+        type: String
     },
-    email:{
-        type:String
+    email: {
+        type: String
     },
-    phone_number:{
-        type:String
+    phone_number: {
+        type: String
     },
-    course:{
-        type:String
+    course: {
+        type: String
     },
+    isAssigned: {
+        type: Boolean
+    },
+    assignedName: {
+        type: String
+    }
 },
-{ timestamps: {createdAt: 'created_at',updatedAt: 'updated_at'} }
+    { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 )
 const Query = mongoose.model('query', querySchema)
 
