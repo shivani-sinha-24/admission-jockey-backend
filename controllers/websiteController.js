@@ -5,6 +5,9 @@ import reply from '../common/reply.js';
 import webList from "../models/websiteListModel.js";
 import Query from "../models/queryModel.js";
 import Universitycourse from "../models/universitycourseModel.js";
+import Scholarship from "../models/scholarshipModel.js";
+import Hostel from "../models/hostelModel.js";
+import Gallery from "../models/galleryModel.js";
 
 
 export default {
@@ -137,5 +140,66 @@ export default {
             res.status(400).send(error)
         }
 
+    },
+    async createPrecictQueryList(req,res){
+        try {
+            let request = req?.body;
+            request ={...request,phone_number:request.mobile}
+            const query = await Query.create(request);
+            res.status(200).send({query,message:"Query submitted"})
+        } catch (error) {
+            res.status(400).send(error)
+        }
+    },
+    async getScholarship(req,res){
+        try {
+            let {id} = req?.params
+            const scholarship = await Scholarship.findOne({property_id:id})
+            res.status(200).send({scholarship,message:"Success"})
+        } catch (error) {
+            res.status(400).send(error)
+        }
+    },
+    async getHostel(req,res){
+        try {
+            let {id} = req?.params
+            const hostel = await Hostel.find({property_id:id})
+            res.status(200).send({hostel,message:"Success"})
+        } catch (error) {
+            res.status(400).send(error)
+        }
+    },
+    async getGallery(req,res){
+        try {
+            let images = []
+            let {id} = req?.params
+            const gallery = await Gallery.find({property_id:id})
+            gallery.map(img=>{images = images.concat(img?.gallery_img)})
+            images?.length > 0 && res.status(200).send({gallery: images,message:"Success"})
+        } catch (error) {
+            res.status(400).send(error)
+        }
+    },
+    async getCoursesForCollege(req,res){
+        try {
+            const {affilite_by} = req?.body;
+            console.log(affilite_by)
+            let uniIdArray = await Promise.all(affilite_by?.map( async uni=>{
+                const university = await College.findOne({name:uni})
+                return(university?._id);
+            }))
+
+            let courses = await Promise.all(uniIdArray.map(async id =>{
+                const idString = id?.toString(); // Convert the object to a string
+                const course = await Universitycourse.find({universityID:idString})
+                return course
+            }))
+
+            // Use the concat method to merge the arrays
+            const mergedArray = [].concat(...courses);
+            res.status(200).send({courses:mergedArray,message:"Success"})
+        } catch (error) {
+            res.status(400).send(error)
+        }
     },
 }

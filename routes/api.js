@@ -180,6 +180,10 @@ Router.get("/universityRows", clgController.universityWebList);
 Router.get("/universityLogoRows", clgController.universityLogoList);
 Router.get("/collegeRows", clgController.collegeWebList);
 Router.get("/collegeLogoRows", clgController.collegeLogoList);
+Router.get("/eduversityRows", clgController.eduversityWebList);
+Router.get("/eduversityLogoRows", clgController.eduversityLogoList);
+Router.get("/onlineLearningRows", clgController.onlineLearningWebList);
+Router.get("/onlineLearningLogoRows", clgController.onlineLearningLogoList);
 
 //COLLEGE UPDATE
 // Router.put("/updateCollege", Authentication, upload.single('image'), clgController.updateCollege);
@@ -514,11 +518,16 @@ Router.get("/getCollegeWebList", Authentication, webController.getCollegeWebsite
 Router.post("/createWebQueryList", webController.createQueryList);
 Router.get("/getQueryList", Authentication, webController.getQueryList);
 Router.get("/getMyTeamList", Authentication, teamLeaderController.getMyTeamList);
+Router.post("/createPrecictQueryList",webController.createPrecictQueryList)
 
 //Get University Course for Websit
 Router.get("/getUniversityCourseWeb", webController.getUniversityCourseWeb);
 Router.get("/getCollegesForSelectedCourse/:course", webController.getCollegesForSelectedCourse);
 Router.post("/get-college-courses/compare",webController.getCourses)
 Router.post("/getWebCompareCollegeList", webController.getWebCompareCollegeList);
+Router.get("/getScholarship/:id",webController.getScholarship)
+Router.get("/getHostel/:id",webController.getHostel)
+Router.get("/getGallery/:id",webController.getGallery)
+Router.post("/getCoursesForCollege",webController.getCoursesForCollege)
 
 export default Router;

@@ -65,6 +65,9 @@ const collegeSchema = new mongoose.Schema({
     isClaimed: {
         type: Boolean
     },
+    description: {
+        type:String
+    },
     created_by_user_id: {
         type: String
     }

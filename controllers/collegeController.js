@@ -186,13 +186,21 @@ export default {
             }
             if (colleges.length > 6 && colleges.length <= 9) {
                 let valuesArr2 = colleges;
-                var removeValFrom = [3, 4, 5];
+                var removeValFrom = [0, 1, 2, 3, 4, 5];
                 valuesArr2 = valuesArr2.filter(function (value, index) {
                     return removeValFrom.indexOf(index) == -1;
                 });
                 firstRow = [colleges[0], colleges[1], colleges[2]];
                 secondRow = [colleges[3], colleges[4], colleges[5]];
                 thirdRow = valuesArr2;
+                // thirdRow = [colleges[6], colleges[7], colleges[8]];
+            }
+            if(colleges.length>9){
+                firstRow = [colleges[0], colleges[1], colleges[2]];
+                secondRow = [colleges[3], colleges[4], colleges[5]];
+                // thirdRow = valuesArr2;
+                thirdRow = [colleges[6], colleges[7], colleges[8]];
+
             }
             return res.status(200).json({ firstRowUni: firstRow, secondRowUni: secondRow, thirdRowUni: thirdRow })
         } catch (err) {
@@ -228,6 +236,14 @@ export default {
                 firstRow = [colleges[0], colleges[1], colleges[2], colleges[3]];
                 secondRow = [colleges[4], colleges[5], colleges[6], colleges[7]];
                 thirdRow = valuesArr2;
+                // thirdRow = [colleges[8], colleges[9], colleges[10], colleges[11]];
+            }
+            if(colleges.length>12){
+                firstRow = [colleges[0], colleges[1], colleges[2], colleges[3]];
+                secondRow = [colleges[4], colleges[5], colleges[6], colleges[7]];
+                // thirdRow = valuesArr2;
+                thirdRow = [colleges[8], colleges[9], colleges[10], colleges[11]];
+
             }
             return res.status(200).json({ firstRowUni: firstRow, secondRowUni: secondRow, thirdRowUni: thirdRow })
         } catch (err) {
@@ -251,18 +267,28 @@ export default {
                 valuesArr1 = valuesArr1.filter(function (value, index) {
                     return removeValFrom.indexOf(index) == -1;
                 });
+                
                 firstRow = [colleges[0], colleges[1], colleges[2]];
                 secondRow = valuesArr1;
             }
             if (colleges.length > 6 && colleges.length <= 9) {
                 let valuesArr2 = colleges;
-                var removeValFrom = [3, 4, 5];
+                var removeValFrom = [0, 1, 2, 3, 4, 5];
                 valuesArr2 = valuesArr2.filter(function (value, index) {
                     return removeValFrom.indexOf(index) == -1;
-                });
+                }); 
+
                 firstRow = [colleges[0], colleges[1], colleges[2]];
                 secondRow = [colleges[3], colleges[4], colleges[5]];
                 thirdRow = valuesArr2;
+
+            }
+            if(colleges.length>9){
+                firstRow = [colleges[0], colleges[1], colleges[2]];
+                secondRow = [colleges[3], colleges[4], colleges[5]];
+                // thirdRow = valuesArr2;
+                thirdRow = [colleges[6], colleges[7], colleges[8]];
+
             }
             return res.status(200).json({ firstRowUni: firstRow, secondRowUni: secondRow, thirdRowUni: thirdRow })
         } catch (err) {
@@ -270,6 +296,7 @@ export default {
             return res.status(400).send({ message: "Unable to fetch colleges datails!" })
         }
     },
+
 
     async collegeLogoList(req, res) {
         try {
@@ -291,13 +318,188 @@ export default {
             }
             if (colleges.length > 8 && colleges.length <= 12) {
                 let valuesArr2 = colleges;
-                var removeValFrom = [4, 5, 6, 7];
+                var removeValFrom = [0, 1, 2, 3, 4, 5, 6, 7];
                 valuesArr2 = valuesArr2.filter(function (value, index) {
                     return removeValFrom.indexOf(index) == -1;
                 });
                 firstRow = [colleges[0], colleges[1], colleges[2], colleges[3]];
                 secondRow = [colleges[4], colleges[5], colleges[6], colleges[7]];
                 thirdRow = valuesArr2;
+                // thirdRow = [colleges[8], colleges[9], colleges[10], colleges[11]];
+            }
+            if(colleges.length>12){;
+                firstRow = [colleges[0], colleges[1], colleges[2], colleges[3]];
+                secondRow = [colleges[4], colleges[5], colleges[6], colleges[7]];
+                // thirdRow = valuesArr2;
+                thirdRow = [colleges[8], colleges[9], colleges[10], colleges[11]];
+
+            }
+            return res.status(200).json({ firstRowUni: firstRow, secondRowUni: secondRow, thirdRowUni: thirdRow })
+        } catch (err) {
+            console.log(err, "error");
+            return res.status(400).send({ message: "Unable to fetch colleges datails!" })
+        }
+    },
+
+    async eduversityWebList(req, res) {
+        try {
+            let colleges = await College.find({ edu_type: "Eduversity" });
+            let firstRow = [];
+            let secondRow = [];
+            let thirdRow = [];
+            if (colleges.length <= 3) {
+                firstRow = colleges;
+            }
+            if (colleges.length > 3 && colleges.length <= 6) {
+                let valuesArr1 = colleges;
+                var removeValFrom = [0, 1, 2];
+                valuesArr1 = valuesArr1.filter(function (value, index) {
+                    return removeValFrom.indexOf(index) == -1;
+                });
+                firstRow = [colleges[0], colleges[1], colleges[2]];
+                secondRow = valuesArr1;
+            }
+            if (colleges.length > 6 && colleges.length <= 9) {
+                let valuesArr2 = colleges;
+                var removeValFrom = [0, 1, 2, 3, 4, 5];
+                valuesArr2 = valuesArr2.filter(function (value, index) {
+                    return removeValFrom.indexOf(index) == -1;
+                });
+                firstRow = [colleges[0], colleges[1], colleges[2]];
+                secondRow = [colleges[3], colleges[4], colleges[5]];
+                thirdRow = valuesArr2;
+            }
+            if(colleges.length>9){
+                firstRow = [colleges[0], colleges[1], colleges[2]];
+                secondRow = [colleges[3], colleges[4], colleges[5]];
+                // thirdRow = valuesArr2;
+                thirdRow = [colleges[6], colleges[7], colleges[8]];
+
+            }
+            return res.status(200).json({ firstRowUni: firstRow, secondRowUni: secondRow, thirdRowUni: thirdRow })
+        } catch (err) {
+            console.log(err, "error");
+            return res.status(400).send({ message: "Unable to fetch colleges datails!" })
+        }
+    },
+    async eduversityLogoList(req, res) {
+        try {
+            let colleges = await College.find({ edu_type: "Eduversity" });
+            let firstRow = [];
+            let secondRow = [];
+            let thirdRow = [];
+            if (colleges.length <= 4) {
+                firstRow = colleges;
+            }
+            if (colleges.length > 4 && colleges.length <= 8) {
+                let valuesArr1 = colleges;
+                var removeValFrom = [0, 1, 2, 3];
+                valuesArr1 = valuesArr1.filter(function (value, index) {
+                    return removeValFrom.indexOf(index) == -1;
+                });
+                firstRow = [colleges[0], colleges[1], colleges[2], colleges[3]];
+                secondRow = valuesArr1;
+            }
+            if (colleges.length > 8 && colleges.length <= 12) {
+                let valuesArr2 = colleges;
+                var removeValFrom = [0, 1, 2, 3, 4, 5, 6, 7];
+                valuesArr2 = valuesArr2.filter(function (value, index) {
+                    return removeValFrom.indexOf(index) == -1;
+                });
+                firstRow = [colleges[0], colleges[1], colleges[2], colleges[3]];
+                secondRow = [colleges[4], colleges[5], colleges[6], colleges[7]];
+                thirdRow = valuesArr2;
+                // thirdRow = [colleges[8], colleges[9], colleges[10], colleges[11]];
+            }
+            if(colleges.length>12){;
+                firstRow = [colleges[0], colleges[1], colleges[2], colleges[3]];
+                secondRow = [colleges[4], colleges[5], colleges[6], colleges[7]];
+                // thirdRow = valuesArr2;
+                thirdRow = [colleges[8], colleges[9], colleges[10], colleges[11]];
+
+            }
+            return res.status(200).json({ firstRowUni: firstRow, secondRowUni: secondRow, thirdRowUni: thirdRow })
+        } catch (err) {
+            console.log(err, "error");
+            return res.status(400).send({ message: "Unable to fetch colleges datails!" })
+        }
+    },
+    async onlineLearningWebList(req, res) {
+        try {
+            let colleges = await College.find({ edu_type: "OnlineLearning" });
+            let firstRow = [];
+            let secondRow = [];
+            let thirdRow = [];
+            if (colleges.length <= 3) {
+                firstRow = colleges;
+            }
+            if (colleges.length > 3 && colleges.length <= 6) {
+                let valuesArr1 = colleges;
+                var removeValFrom = [0, 1, 2];
+                valuesArr1 = valuesArr1.filter(function (value, index) {
+                    return removeValFrom.indexOf(index) == -1;
+                });
+                firstRow = [colleges[0], colleges[1], colleges[2]];
+                secondRow = valuesArr1;
+            }
+            if (colleges.length > 6 && colleges.length <= 9) {
+                let valuesArr2 = colleges;
+                var removeValFrom = [0, 1, 2, 3, 4, 5];
+                valuesArr2 = valuesArr2.filter(function (value, index) {
+                    return removeValFrom.indexOf(index) == -1;
+                });
+                firstRow = [colleges[0], colleges[1], colleges[2]];
+                secondRow = [colleges[3], colleges[4], colleges[5]];
+                thirdRow = valuesArr2;
+            }
+            if(colleges.length>9){
+                firstRow = [colleges[0], colleges[1], colleges[2]];
+                secondRow = [colleges[3], colleges[4], colleges[5]];
+                // thirdRow = valuesArr2;
+                thirdRow = [colleges[6], colleges[7], colleges[8]];
+
+            }
+            return res.status(200).json({ firstRowUni: firstRow, secondRowUni: secondRow, thirdRowUni: thirdRow })
+        } catch (err) {
+            console.log(err, "error");
+            return res.status(400).send({ message: "Unable to fetch colleges datails!" })
+        }
+    },
+    async onlineLearningLogoList(req, res) {
+        try {
+            let colleges = await College.find({ edu_type: "OnlineLearning" });
+            let firstRow = [];
+            let secondRow = [];
+            let thirdRow = [];
+            if (colleges.length <= 4) {
+                firstRow = colleges;
+            }
+            if (colleges.length > 4 && colleges.length <= 8) {
+                let valuesArr1 = colleges;
+                var removeValFrom = [0, 1, 2, 3];
+                valuesArr1 = valuesArr1.filter(function (value, index) {
+                    return removeValFrom.indexOf(index) == -1;
+                });
+                firstRow = [colleges[0], colleges[1], colleges[2], colleges[3]];
+                secondRow = valuesArr1;
+            }
+            if (colleges.length > 8 && colleges.length <= 12) {
+                let valuesArr2 = colleges;
+                var removeValFrom = [0, 1, 2, 3, 4, 5, 6, 7];
+                valuesArr2 = valuesArr2.filter(function (value, index) {
+                    return removeValFrom.indexOf(index) == -1;
+                });
+                firstRow = [colleges[0], colleges[1], colleges[2], colleges[3]];
+                secondRow = [colleges[4], colleges[5], colleges[6], colleges[7]];
+                thirdRow = valuesArr2;
+                // thirdRow = [colleges[8], colleges[9], colleges[10], colleges[11]];
+            }
+            if(colleges.length>12){;
+                firstRow = [colleges[0], colleges[1], colleges[2], colleges[3]];
+                secondRow = [colleges[4], colleges[5], colleges[6], colleges[7]];
+                // thirdRow = valuesArr2;
+                thirdRow = [colleges[8], colleges[9], colleges[10], colleges[11]];
+
             }
             return res.status(200).json({ firstRowUni: firstRow, secondRowUni: secondRow, thirdRowUni: thirdRow })
         } catch (err) {
