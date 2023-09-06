@@ -15,7 +15,7 @@ export default {
         const query = await Query.find({ isAssigned: true });
         return res.status(200).json(query);
     },
-
+    
     async getMyTeamList(req, res) {
         const myTeam = await User.find({ role: 3 });
         return res.status(200).json(myTeam);

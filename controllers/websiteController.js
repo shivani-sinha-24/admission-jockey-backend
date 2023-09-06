@@ -13,19 +13,37 @@ import Gallery from "../models/galleryModel.js";
 export default {
     async createCollegeList(req, res) {
         console.log(req.body);
-        let collegeList=webList.find({});
+        let collegeList = webList.find({});
         console.log(collegeList);
     },
-    async createQueryList(req,res){
+    async createQueryList(req, res) {
         let request = req?.body;
         const query = await Query.create(request);
-        res.status(200).send({query,message:"Query submitted"})
+        res.status(200).send({ query, message: "Query submitted" })
     },
 
-    async getQueryList(req,res){
+    async getQueryList(req, res) {
         let request = req?.body;
-        const query = await Query.find({isAssigned:true});
+        const query = await Query.find({ isAssigned: false });
         return res.status(200).json(query);
+    },
+
+    async setQuery(req, res) {
+        let request = req?.body;
+        const exist = await Query.find({ _id: request.query });
+        console.log(exist,"exist");
+        if (exist) {
+            await Query.findByIdAndUpdate(
+                { _id: request.query },
+                {
+                    $set: {
+                        name: exist[0].name,
+                        email: exist[0].email,
+                        url: req.body.url,
+                        focus_keyword: req.body.focus_keyword
+                    }
+                });
+        }
     },
 
     async getUniversityCourseWeb(req, res) {
@@ -38,30 +56,30 @@ export default {
     },
     async getCollegesForSelectedCourse(req, res) {
         try {
-            const {course} = req?.params;
+            const { course } = req?.params;
 
-            const universityCourse = await Universitycourse.find({name:course});
+            const universityCourse = await Universitycourse.find({ name: course });
 
-            const universities_with_course = [...new Set (universityCourse?.map(course=>course?.universityID))];
+            const universities_with_course = [...new Set(universityCourse?.map(course => course?.universityID))];
 
-            const university = await College.find({edu_type:'University'})
-            const uniDetail =  [...new Set(university?.map(uni=>{return {name:uni.name,id:uni._id}}))];
+            const university = await College.find({ edu_type: 'University' })
+            const uniDetail = [...new Set(university?.map(uni => { return { name: uni.name, id: uni._id } }))];
 
             const universityNames = [];
 
             uniDetail.forEach((detail) => {
                 universities_with_course.forEach((uni) => {
                     if (detail.id == uni) {
-                    universityNames.push(detail.name); 
+                        universityNames.push(detail.name);
                     }
                 });
             });
 
-            
-            const colleges = await College.find({affilite_by: { $in: universityNames }})
+
+            const colleges = await College.find({ affilite_by: { $in: universityNames } })
 
             return res.status(200).json(colleges);
-          
+
         } catch (error) {
             res.status(400).send(error)
         }
@@ -107,35 +125,35 @@ export default {
         }
     },
 
-    async getCourses(req,res){
+    async getCourses(req, res) {
         try {
             const universities = (req?.body)
-            let uniIdArray = await Promise.all(universities?.map( async uni=>{
-                const university = await College.findOne({name:uni})
-                return(university?._id);
+            let uniIdArray = await Promise.all(universities?.map(async uni => {
+                const university = await College.findOne({ name: uni })
+                return (university?._id);
             }))
 
-            let courses = await Promise.all(uniIdArray.map(async id =>{
+            let courses = await Promise.all(uniIdArray.map(async id => {
                 const idString = id?.toString(); // Convert the object to a string
-                const course = await Universitycourse.find({universityID:idString})
+                const course = await Universitycourse.find({ universityID: idString })
                 return course
             }))
 
             res.status(200).send(courses);
-                
+
         } catch (error) {
             res.status(400).send(error)
         }
     },
-    
+
     async getWebCompareCollegeList(req, res) {
         try {
             const idArray = req?.body;
-            let colleges = await Promise.all(idArray?.map(async id =>{
-                const college = await College.findOne({_id:id})
+            let colleges = await Promise.all(idArray?.map(async id => {
+                const college = await College.findOne({ _id: id })
                 return college
             }))
-                res?.status(200)?.send(colleges)
+            res?.status(200)?.send(colleges)
         } catch (error) {
             res.status(400).send(error)
         }
