@@ -14,7 +14,8 @@ const querySchema = new mongoose.Schema({
         type: String
     },
     isAssigned: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     assignedName: {
         type: String
