@@ -517,8 +517,14 @@ Router.get("/getCollegeWebList", Authentication, webController.getCollegeWebsite
 // Create WebQuery List
 Router.post("/createWebQueryList", webController.createQueryList);
 Router.get("/getQueryList", Authentication, webController.getQueryList);
+Router.get("/findCallerAssigned/:id", Authentication, webController.findCallerAssigned);
+Router.put("/findQueryForUpdate", Authentication, webController.findQueryForUpdate);
+Router.get("/getQueryById/:id", Authentication, webController.getQueryById);
+Router.post("/getQueriesAssigned",Authentication,webController.getQueriesAssigned)
 Router.post("/setQuery", Authentication, webController.setQuery);
-Router.get("/getMyTeamList", Authentication, teamLeaderController.getMyTeamList);
+Router.put("/updateQuery", Authentication, webController.updateQuery);
+Router.get("/getMyTeamList/:teamLeader", Authentication, teamLeaderController.getMyTeamList);
+Router.get("/getTeamList/:tlName", Authentication, teamLeaderController.getTeamList);
 Router.post("/createPrecictQueryList",webController.createPrecictQueryList)
 
 //Get University Course for Websit

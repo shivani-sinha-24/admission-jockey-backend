@@ -8,6 +8,7 @@ import Universitycourse from "../models/universitycourseModel.js";
 import Scholarship from "../models/scholarshipModel.js";
 import Hostel from "../models/hostelModel.js";
 import Gallery from "../models/galleryModel.js";
+import User from "../models/userModel.js";
 
 
 export default {
@@ -24,26 +25,92 @@ export default {
 
     async getQueryList(req, res) {
         let request = req?.body;
-        const query = await Query.find({ isAssigned: false });
+        const query = await Query.find();
+        return res.status(200).json(query);
+    },
+    
+    async findQueryForUpdate(req, res) {
+        try {
+            const callerId = req?.body?.id; // Assuming the callerId is in the request body
+    
+            // Use Mongoose to find the Query based on the assignedName field
+            const query = await Query.find({ assignedName: callerId });
+            console.log('query :', query)
+    
+            // if (!query) {
+            //     return res.status(404).json({ message: 'Query not found' });
+            // }
+    
+            // If you found the Query, you can return it in the response
+            return res.status(200).json(query);
+        } catch (error) {
+            console.error('Error while finding the Query:', error);
+            return res.status(500).json({ message: 'Internal Server Error' });
+        }
+    },
+
+    async findCallerAssigned(req, res) {
+        try {
+            const queryId = req?.params?.id; // Assuming the callerId is in the request body
+    
+            // Use Mongoose to find the Query based on the assignedName field
+            const caller = await User.find({ queriesAssigned: { $in: [queryId] } });
+    
+            if (!caller) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+    
+            // If you found the caller, you can return it in the response
+            return res.status(200).json(caller);
+        } catch (error) {
+            console.error('Error while finding the Caller:', error);
+            return res.status(500).json({ message: 'Internal Server Error' });
+        }
+    },
+
+    async getQueryById(req, res) {
+        const query = await Query.findOne({ _id: req?.params?.id });
+        return res.status(200).json(query);
+    },
+
+    async updateQuery(req, res) {
+        let request = req?.body;
+        const query = await Query.findOneAndUpdate({ _id: request?.id },{$set:{status:request?.status}},{new:true});
         return res.status(200).json(query);
     },
 
     async setQuery(req, res) {
-        let request = req?.body;
-        const exist = await Query.find({ _id: request.query });
-        console.log(exist,"exist");
-        if (exist) {
-            await Query.findByIdAndUpdate(
-                { _id: request.query },
-                {
-                    $set: {
-                        name: exist[0].name,
-                        email: exist[0].email,
-                        url: req.body.url,
-                        focus_keyword: req.body.focus_keyword
-                    }
-                });
+        try {
+            let request = req?.body;
+            const exist = await Query.findOne({ _id: request.query });
+            if (exist) {
+                const query = await Query.findOneAndUpdate({ _id: request.query },{ $set: {isAssigned:true, assignedName: request?.callerName,}},{new:true});
+                const user = await User.findOneAndUpdate({_id:request?.callerName},{$addToSet:{queriesAssigned:request?.query}},{new:true})
+                return res.status(200).json(query);
+            }
+        } catch (error) {
+            res.status(400).send(error)
         }
+    },
+
+    async getQueriesAssigned(req, res) {
+        try {
+        const callerId = req?.body?.id; // Assuming the callerId is in the request body
+    
+        // Use Mongoose to find the Query based on the assignedName field
+        const query = await Query.find({ assignedName: callerId });
+        console.log('query :', query)
+
+        // if (!query) {
+        //     return res.status(404).json({ message: 'Query not found' });
+        // }
+
+        // If you found the Query, you can return it in the response
+        return res.status(200).json(query);
+    } catch (error) {
+        console.error('Error while finding the Query:', error);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
     },
 
     async getUniversityCourseWeb(req, res) {
@@ -53,7 +120,7 @@ export default {
         } catch (error) {
             res.status(400).send(error)
         }
-    },
+    },    
     async getCollegesForSelectedCourse(req, res) {
         try {
             const { course } = req?.params;

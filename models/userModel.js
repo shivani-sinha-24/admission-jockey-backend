@@ -69,8 +69,14 @@ const userSchema = new mongoose.Schema({
     underTeam:{
         type: Boolean,
     },
+    sub_role:{
+        type: String
+    },
     permissions:{
         type:Object
+    },
+    queriesAssigned:{
+        type:Array
     }
 },
 

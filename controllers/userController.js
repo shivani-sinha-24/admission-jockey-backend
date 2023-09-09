@@ -875,7 +875,7 @@ export default {
     createUserTeamLeader: async (req, res) => {
         try {
             let request = req.body;
-            await User.findOneAndUpdate({ "name": request.teamLeader }, { "isTeamLeader": true, "underTeam": false });
+            await User.findOneAndUpdate({ "name": request.teamLeader }, { "isTeamLeader": true, "underTeam": false , sub_role:"100" });
             const records = await User.find().where('name').in(request.team).exec();
             let idList = records.map((id) => {
                 return id._id.toString();

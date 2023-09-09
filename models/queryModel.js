@@ -58,6 +58,9 @@ const querySchema = new mongoose.Schema({
     working:{
         type:String
     },
+    status:{
+        type:String
+    }
 
 },
     { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
