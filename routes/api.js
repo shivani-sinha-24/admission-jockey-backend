@@ -522,6 +522,8 @@ Router.put("/findQueryForUpdate", Authentication, webController.findQueryForUpda
 Router.get("/getQueryById/:id", Authentication, webController.getQueryById);
 Router.post("/getQueriesAssigned",Authentication,webController.getQueriesAssigned)
 Router.post("/setQuery", Authentication, webController.setQuery);
+Router.delete("/deleteQuery/:id", Authentication, webController.deleteQuery);
+
 Router.put("/updateQuery", Authentication, webController.updateQuery);
 Router.get("/getMyTeamList/:teamLeader", Authentication, teamLeaderController.getMyTeamList);
 Router.get("/getTeamList/:tlName", Authentication, teamLeaderController.getTeamList);

@@ -28,6 +28,21 @@ export default {
         const query = await Query.find();
         return res.status(200).json(query);
     },
+    // Delete Query:
+    async deleteQuery(req, res) {
+        try {
+            let id = req.params.id;
+            const query = await Query.findByIdAndRemove(id);
+            const queryList = await Query.find();
+            if (!query) {
+                return res.status(404).send({ cmessage: "Query not found" })
+            }
+            return res.status(200).json({ queryList: queryList })
+        } catch (err) {
+            console.log(err);
+            return res.status(400).send(err)
+        }
+    },
     
     async findQueryForUpdate(req, res) {
         try {
@@ -35,8 +50,8 @@ export default {
     
             // Use Mongoose to find the Query based on the assignedName field
             const query = await Query.find({ assignedName: callerId });
-            console.log('query :', query)
-    
+
+            
             // if (!query) {
             //     return res.status(404).json({ message: 'Query not found' });
             // }
